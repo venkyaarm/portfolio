@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import styled from "styled-components";
-import { motion } from "framer-motion";
+import { motion, useAnimation, useInView } from "framer-motion";
 import { FaFilePdf } from "react-icons/fa";
 
 // 🔹 Section Layout
@@ -35,7 +35,7 @@ const Content = styled.div`
   }
 `;
 
-const Title = styled.h2`
+const Title = styled(motion.h2)`
   font-size: 2.5rem;
   color: #00ffff;
   margin-bottom: 1.5rem;
@@ -56,7 +56,7 @@ const Title = styled.h2`
   }
 `;
 
-const Description = styled.p`
+const Description = styled(motion.p)`
   font-size: 1.15rem;
   line-height: 1.8;
   color: #d8e3e7;
@@ -67,7 +67,7 @@ const Description = styled.p`
   }
 `;
 
-const ResumeButton = styled.a`
+const ResumeButton = styled(motion.a)`
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
@@ -100,7 +100,6 @@ const ProfileContainer = styled.div`
   }
 `;
 
-// 🔹 Glow effect only when hovered
 const GlowBox = styled(motion.div)`
   width: 380px;
   height: 380px;
@@ -129,13 +128,42 @@ const ProfileImage = styled.img`
   border-radius: 15px;
 `;
 
+// ✨ Variants for smooth scroll animation
+// ✨ Variants for smooth scroll animation
+const fadeUp = {
+  hidden: { opacity: 0, y: 60 }, // slightly more y offset for smoother entrance
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    transition: { 
+      duration: 1.2, // slower duration
+      ease: "easeOut" 
+    } 
+  },
+};
+
+
 export default function About() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { threshold: 0.2 });
+  const controls = useAnimation();
+
+  useEffect(() => {
+    if (isInView) {
+      controls.start("visible");
+    } else {
+      controls.start("hidden"); // 👈 Replay animation when scrolled back
+    }
+  }, [isInView, controls]);
+
   return (
-    <Section id="about">
+    <Section id="about" ref={ref}>
       {/* Left Side — Description */}
       <Content>
-        <Title>About Me</Title>
-        <Description>
+        <Title initial="hidden" animate={controls} variants={fadeUp}>
+          About Me
+        </Title>
+        <Description initial="hidden" animate={controls} variants={fadeUp}>
           I'm <strong>Kuncham Venkatesh</strong>, a passionate <strong>BCA student</strong> with a deep interest in
           <strong> AI-driven and API-integrated web applications</strong>. I specialize in building modern, visually engaging,
           and intelligent digital experiences using <strong>React.js</strong> and <strong>Node.js</strong>.
@@ -148,7 +176,14 @@ export default function About() {
           and pushing the boundaries of web interactivity. My goal is to innovate with purpose and create
           products that inspire and empower users.
         </Description>
-        <ResumeButton href="/resume.pdf" target="_blank" rel="noopener noreferrer">
+        <ResumeButton
+          href="/resume.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          initial="hidden"
+          animate={controls}
+          variants={fadeUp}
+        >
           <FaFilePdf /> View Resume
         </ResumeButton>
       </Content>
@@ -157,8 +192,8 @@ export default function About() {
       <ProfileContainer>
         <GlowBox
           initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8 }}
+          animate={controls}
+          variants={fadeUp}
         >
           <ProfileImage src="/profile.jpg" alt="Kuncham Venkatesh" />
         </GlowBox>

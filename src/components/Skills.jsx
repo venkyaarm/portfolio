@@ -2,7 +2,7 @@ import React from "react";
 import styled, { keyframes } from "styled-components";
 import { motion } from "framer-motion";
 
-// ✨ Floating animation
+// ✨ Floating animation (idle hover effect)
 const float = keyframes`
   0% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }
@@ -19,7 +19,7 @@ const Section = styled.section`
   margin: 3rem auto;
 `;
 
-const Title = styled.h2`
+const Title = styled(motion.h2)`
   font-size: 3rem;
   color: #00ffff;
   margin-bottom: 2.5rem;
@@ -46,22 +46,22 @@ const Title = styled.h2`
 
 const SkillGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* ✅ 4 cards per row on desktop */
+  grid-template-columns: repeat(4, 1fr);
   gap: 2.2rem;
   justify-items: center;
   align-items: center;
   margin-top: 3rem;
 
   @media (max-width: 1024px) {
-    grid-template-columns: repeat(3, 1fr); /* 3 per row on medium screens */
+    grid-template-columns: repeat(3, 1fr);
   }
 
   @media (max-width: 768px) {
-    grid-template-columns: repeat(2, 1fr); /* 2 per row on tablet */
+    grid-template-columns: repeat(2, 1fr);
   }
 
   @media (max-width: 480px) {
-    grid-template-columns: 1fr; /* 1 per row on small mobile */
+    grid-template-columns: 1fr;
     gap: 1.8rem;
   }
 `;
@@ -120,10 +120,18 @@ const SkillName = styled.span`
   opacity: 0;
   transform: translateY(20px);
   transition: all 0.4s ease;
-
-  /* ✨ Stylish glowing text */
   text-shadow: 0 0 8px #00ffff, 0 0 16px #00ffff;
 `;
+
+// ✨ Animation Variants
+const fadeUp = {
+  hidden: { opacity: 0, y: 50 },
+  visible: (i) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.1, duration: 0.6, ease: "easeOut" },
+  }),
+};
 
 export default function Skills() {
   const skills = [
@@ -142,13 +150,26 @@ export default function Skills() {
 
   return (
     <Section id="skills">
-      <Title>Technical Skills</Title>
+      {/* ✨ Animated Title */}
+      <Title
+        initial={{ opacity: 0, y: -40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
+        viewport={{ once: true }}
+      >
+        Technical Skills
+      </Title>
+
+      {/* ✨ Animated Skill Cards */}
       <SkillGrid>
         {skills.map((s, i) => (
           <SkillCard
             key={i}
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 200 }}
+            custom={i}
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
           >
             <SkillImage src={s.img} alt={s.name} />
             <SkillName>{s.name}</SkillName>
