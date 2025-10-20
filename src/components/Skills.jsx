@@ -1,0 +1,160 @@
+import React from "react";
+import styled, { keyframes } from "styled-components";
+import { motion } from "framer-motion";
+
+// ✨ Floating animation
+const float = keyframes`
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+`;
+
+const Section = styled.section`
+  padding: 6rem 10%;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  text-align: center;
+  border-radius: 20px;
+  box-shadow: 0px 0px 25px rgba(0, 255, 255, 0.15);
+  color: #fff;
+  margin: 3rem auto;
+`;
+
+const Title = styled.h2`
+  font-size: 3rem;
+  color: #00ffff;
+  margin-bottom: 2.5rem;
+  position: relative;
+  display: inline-block;
+  font-weight: 600;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 4px;
+    width: 80px;
+    background: #ffcc00;
+    border-radius: 2px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 2rem;
+  }
+`;
+
+const SkillGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* ✅ 4 cards per row on desktop */
+  gap: 2.2rem;
+  justify-items: center;
+  align-items: center;
+  margin-top: 3rem;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr); /* 3 per row on medium screens */
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr); /* 2 per row on tablet */
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr; /* 1 per row on small mobile */
+    gap: 1.8rem;
+  }
+`;
+
+const SkillCard = styled(motion.div)`
+  position: relative;
+  width: 180px;
+  height: 180px;
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  animation: ${float} 4s ease-in-out infinite;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  &:hover img {
+    transform: scale(1.1);
+    filter: brightness(0.3);
+  }
+
+  &:hover span {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 480px) {
+    width: 150px;
+    height: 150px;
+  }
+`;
+
+const SkillImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease, filter 0.4s ease;
+`;
+
+const SkillName = styled.span`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  padding: 0.6rem 0;
+  background: rgba(0, 255, 255, 0.2);
+  backdrop-filter: blur(6px);
+  border-top: 2px solid rgba(255, 255, 255, 0.2);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s ease;
+
+  /* ✨ Stylish glowing text */
+  text-shadow: 0 0 8px #00ffff, 0 0 16px #00ffff;
+`;
+
+export default function Skills() {
+  const skills = [
+    { name: "HTML", img: "/skills/html.png" },
+    { name: "CSS", img: "/skills/css.png" },
+    { name: "C", img: "/skills/c.png" },
+    { name: "C++", img: "/skills/cpp.png" },
+    { name: "Java", img: "/skills/java.png" },
+    { name: "Python", img: "/skills/python.png" },
+    { name: "SQL", img: "/skills/sql.png" },
+    { name: "React.js", img: "/skills/react.png" },
+    { name: "Node.js", img: "/skills/node.png" },
+    { name: "GitHub", img: "/skills/github.png" },
+    { name: "VS Code", img: "/skills/vscode.png" },
+  ];
+
+  return (
+    <Section id="skills">
+      <Title>Technical Skills</Title>
+      <SkillGrid>
+        {skills.map((s, i) => (
+          <SkillCard
+            key={i}
+            whileHover={{ scale: 1.05 }}
+            transition={{ type: "spring", stiffness: 200 }}
+          >
+            <SkillImage src={s.img} alt={s.name} />
+            <SkillName>{s.name}</SkillName>
+          </SkillCard>
+        ))}
+      </SkillGrid>
+    </Section>
+  );
+}

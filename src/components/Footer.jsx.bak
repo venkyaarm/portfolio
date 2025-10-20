@@ -1,0 +1,12 @@
+import React from "react";
+import styled from "styled-components";
+
+const Foot = styled.footer`
+  text-align: center;
+  padding: 1.5rem;
+  background: rgba(255,255,255,0.1);
+`;
+
+export default function Footer() {
+  return <Foot>Designed and Build by venky © 2025</Foot>;
+}

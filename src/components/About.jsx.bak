@@ -1,0 +1,126 @@
+import React from "react";
+import styled from "styled-components";
+import { motion } from "framer-motion";
+
+// 🔹 Section Layout
+const Section = styled.section`
+  padding: 6rem 10%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  margin: 3rem auto;
+  box-shadow: 0px 0px 25px rgba(0, 255, 255, 0.15);
+
+  @media (max-width: 900px) {
+    flex-direction: column-reverse;
+    text-align: center;
+  }
+`;
+
+// 🔹 Text Section
+const Content = styled.div`
+  flex: 1.3;
+  color: #fff;
+  text-align: left;
+  max-width: 600px;
+
+  @media (max-width: 900px) {
+    text-align: center;
+  }
+`;
+
+const Title = styled.h2`
+  font-size: 2.3rem;
+  color: #00ffff;
+  margin-bottom: 1rem;
+  position: relative;
+
+  &::after {
+    content: "";
+    display: block;
+    width: 70px;
+    height: 3px;
+    background: #ffcc00;
+    margin-top: 8px;
+  }
+`;
+
+const Description = styled.p`
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #d8e3e7;
+`;
+
+// 🔹 Profile Section
+const ProfileContainer = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  position: relative;
+`;
+
+// 🔹 Glow effect only when hovered
+const GlowBox = styled(motion.div)`
+  width: 380px;
+  height: 380px;
+  border-radius: 15px;
+  border: 4px solid transparent;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  box-shadow: 0 0 0 transparent;
+
+  &:hover {
+    border-color: #00ffff;
+    box-shadow: 0 0 25px #00ffff, 0 0 60px #00ffff;
+    transform: scale(1.05);
+  }
+`;
+
+const ProfileImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 15px;
+`;
+
+export default function About() {
+  return (
+    <Section id="about">
+      {/* Left Side — Description */}
+      <Content>
+        <Title>About Me</Title>
+        <Description>
+          I'm <strong>Kuncham Venkatesh</strong>, a passionate <strong>BCA student</strong> with a deep interest in
+          <strong> AI-driven and API-integrated web applications</strong>. I specialize in building
+          modern, visually engaging, and intelligent digital experiences using
+          <strong> React.js</strong> and <strong>Node.js</strong>.
+          <br />
+          <br />
+          My work blends creativity with technical precision — transforming complex ideas into elegant,
+          user-focused interfaces. I enjoy crafting AI-powered applications such as
+          Q&A Systems, Resume Analyzers, and Interactive Web Tools that solve real-world challenges.
+          <br />
+          <br />
+          Beyond development, I’m continuously exploring emerging technologies, improving UI aesthetics,
+          and pushing the boundaries of web interactivity. My goal is to innovate with purpose and create
+          products that inspire and empower users.
+        </Description>
+      </Content>
+
+      {/* Right Side — Profile Picture */}
+      <ProfileContainer>
+        <GlowBox
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8 }}
+        >
+          <ProfileImage src="/profile.jpg" alt="Kuncham Venkatesh" />
+        </GlowBox>
+      </ProfileContainer>
+    </Section>
+  );
+}
