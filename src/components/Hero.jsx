@@ -158,7 +158,7 @@ export default function Hero() {
       <SocialIcons>
         <IconLink href="https://github.com/venkyaarm" target="_blank"><FaGithub /></IconLink>
         <IconLink href="https://linkedin.com/in/venkatesh-kuncham-120531307" target="_blank"><FaLinkedin /></IconLink>
-        <IconLink href="https://instagram.com/yourinstagram" target="_blank"><FaInstagram /></IconLink>
+        <IconLink href="https://instagram.com/venky__x8" target="_blank"><FaInstagram /></IconLink>
         <IconLink href="mailto:venkyaam@mail.com"><FaEnvelope /></IconLink>
       </SocialIcons>
     </HeroSection>
