@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import styled from "styled-components";
 import { motion, useAnimation, useInView } from "framer-motion";
-import { FaFilePdf } from "react-icons/fa";
+import { FaFilePdf, FaDownload } from "react-icons/fa";
 
 // 🔹 Section Layout
 const Section = styled.section`
@@ -67,6 +67,13 @@ const Description = styled(motion.p)`
   }
 `;
 
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+`;
+
+// 🔹 View Resume Button
 const ResumeButton = styled(motion.a)`
   display: inline-flex;
   align-items: center;
@@ -79,11 +86,53 @@ const ResumeButton = styled(motion.a)`
   text-decoration: none;
   transition: all 0.3s ease;
   font-size: 1rem;
+  position: relative;
+  overflow: hidden;
 
   &:hover {
     background: linear-gradient(135deg, #ffcc00, #00ffff);
     transform: scale(1.05);
     color: #fff;
+  }
+`;
+
+// 🔹 Download Button (Ripple Effect)
+const DownloadButton = styled(motion.a)`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.8rem 1.6rem;
+  background: linear-gradient(135deg, #ff007f, #00ccff);
+  color: #000;
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    transform: scale(1.05);
+    color: #fff;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+    transform: scale(0);
+    opacity: 0;
+    transition: transform 0.5s, opacity 1s;
+  }
+
+  &:active::after {
+    transform: scale(20);
+    opacity: 0;
+    transition: 0s;
   }
 `;
 
@@ -128,20 +177,15 @@ const ProfileImage = styled.img`
   border-radius: 15px;
 `;
 
-// ✨ Variants for smooth scroll animation
-// ✨ Variants for smooth scroll animation
+// ✨ Animation Variants
 const fadeUp = {
-  hidden: { opacity: 0, y: 60 }, // slightly more y offset for smoother entrance
-  visible: { 
-    opacity: 1, 
-    y: 0, 
-    transition: { 
-      duration: 1.2, // slower duration
-      ease: "easeOut" 
-    } 
+  hidden: { opacity: 0, y: 60 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 1.2, ease: "easeOut" },
   },
 };
-
 
 export default function About() {
   const ref = useRef(null);
@@ -152,7 +196,7 @@ export default function About() {
     if (isInView) {
       controls.start("visible");
     } else {
-      controls.start("hidden"); // 👈 Replay animation when scrolled back
+      controls.start("hidden");
     }
   }, [isInView, controls]);
 
@@ -176,16 +220,29 @@ export default function About() {
           and pushing the boundaries of web interactivity. My goal is to innovate with purpose and create
           products that inspire and empower users.
         </Description>
-        <ResumeButton
-          href="/resume.pdf"
-          target="_blank"
-          rel="noopener noreferrer"
-          initial="hidden"
-          animate={controls}
-          variants={fadeUp}
-        >
-          <FaFilePdf /> View Resume
-        </ResumeButton>
+
+        <ButtonContainer>
+          <ResumeButton
+            href="/resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            initial="hidden"
+            animate={controls}
+            variants={fadeUp}
+          >
+            <FaFilePdf /> View Resume
+          </ResumeButton>
+
+          <DownloadButton
+            href="/resume.pdf"
+            download
+            initial="hidden"
+            animate={controls}
+            variants={fadeUp}
+          >
+            <FaDownload /> Download Resume
+          </DownloadButton>
+        </ButtonContainer>
       </Content>
 
       {/* Right Side — Profile Picture */}
