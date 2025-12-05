@@ -1,47 +1,47 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaBars, FaTimes } from "react-icons/fa";
 
-// ===================== NAVBAR WRAPPER =====================
+/* ========================================================= */
+/*                     MAIN NAV STYLES                        */
+/* ========================================================= */
 const NavWrapper = styled(motion.nav)`
   position: fixed;
   top: 0;
   width: 100%;
-  padding: ${(props) => (props.shrink ? "0.6rem 6%" : "1.4rem 6%")};
-  background: rgba(0, 0, 0, 0.35);
+  padding: ${(props) => (props.$shrink ? "0.5rem 5%" : "1rem 5%")};
   backdrop-filter: blur(14px);
+  background: rgba(0, 0, 0, 0.35);
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  z-index: 500;
-
-  transition: padding 0.35s ease, background 0.3s ease;
-
+  justify-content: space-between;
+  z-index: 900;
+  transition: 0.35s ease;
   border-bottom: 1px solid rgba(0, 255, 255, 0.15);
-  box-shadow: ${(props) =>
-    props.shrink ? "0 4px 25px rgba(0, 255, 255, 0.15)" : "none"};
 `;
 
-// ===================== BRAND =====================
-const Brand = styled(motion.h1)`
+/* ========================================================= */
+/*                        BRAND                               */
+/* ========================================================= */
+const Brand = styled.h1`
   font-size: 2rem;
   font-weight: 800;
   color: #00eaff;
-  letter-spacing: 1.5px;
-  cursor: pointer;
-  transition: 0.3s;
+  user-select: none;
 
-  &:hover {
-    color: #ffe066;
-    text-shadow: 0 0 10px #ffe066;
+  @media (max-width: 480px) {
+    font-size: 1.4rem;
   }
 `;
 
-// ===================== DESKTOP LINKS =====================
+/* ========================================================= */
+/*                   DESKTOP LINK AREA                        */
+/* ========================================================= */
 const Links = styled.div`
   display: flex;
-  gap: 3rem;
+  gap: 2.8rem;
+  position: relative;
 
   @media (max-width: 768px) {
     display: none;
@@ -49,147 +49,199 @@ const Links = styled.div`
 `;
 
 const NavLink = styled.a`
-  font-size: 1.15rem;
-  font-weight: 500;
+  font-size: 1.1rem;
+  color: ${(p) => (p.$active ? "#00eaff" : "#ffffff")};
   text-decoration: none;
-  color: ${(props) => (props.active ? "#00eaff" : "#ffffff")};
-  transition: 0.3s ease;
+  font-weight: 500;
   position: relative;
+  transition: 0.25s;
 
   &:hover {
     color: #00eaff;
   }
-
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: -6px;
-    left: 0;
-    height: 2px;
-    width: ${(props) => (props.active ? "100%" : "0%")};
-    background: #00eaff;
-    transition: width 0.3s;
-  }
-
-  &:hover::after {
-    width: 100%;
-  }
 `;
 
-// ===================== MOBILE MENU ICON =====================
+/* ========================================================= */
+/*                  Sliding Neon Underline                    */
+/* ========================================================= */
+const Underline = styled(motion.div)`
+  position: absolute;
+  bottom: -8px;
+  height: 3px;
+  border-radius: 5px;
+  background: #00eaff;
+  box-shadow: 0 0 10px #00eaff;
+`;
+
+/* ========================================================= */
+/*                Glow Bubble Behind Active Link              */
+/* ========================================================= */
+const GlowBubble = styled(motion.div)`
+  position: absolute;
+  top: -6px;
+  height: 34px;
+  border-radius: 10px;
+  background: rgba(0, 255, 255, 0.22);
+  box-shadow: 0 0 12px rgba(0, 255, 255, 0.4);
+  z-index: -1;
+`;
+
+/* ========================================================= */
+/*                    MOBILE MENU ICON                        */
+/* ========================================================= */
 const MenuIcon = styled.div`
-  display: none;
-  font-size: 2rem;
+  font-size: 1.8rem;
   color: #00eaff;
   cursor: pointer;
-  transition: 0.2s;
 
-  &:hover {
-    transform: scale(1.15);
+  @media (min-width: 768px) {
+    display: none;
   }
 
-  @media (max-width: 768px) {
-    display: block;
+  @media (max-width: 480px) {
+    font-size: 1.5rem;
   }
 `;
 
-// ===================== OVERLAY =====================
+/* ========================================================= */
+/*                        MOBILE MENU                         */
+/* ========================================================= */
+const MobileMenu = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 72%;
+  padding-top: 6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.2rem;
+  align-items: center;
+
+  background: rgba(5, 18, 25, 0.95);
+  backdrop-filter: blur(18px);
+  z-index: 1000;
+
+  a {
+    color: white;
+    font-size: 1.3rem;
+    font-weight: 600;
+    transition: 0.25s;
+
+    &:hover {
+      color: #00eaff;
+      transform: translateX(8px);
+    }
+  }
+
+  @media (max-width: 480px) {
+    width: 78%;
+  }
+`;
+
 const Overlay = styled(motion.div)`
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(6px);
-  z-index: 400;
+  z-index: 999;
 `;
 
-// ===================== MOBILE MENU =====================
-const MobileMenu = styled(motion.div)`
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 78%;
-  height: 100vh;
-  background: rgba(10, 25, 35, 0.95);
-  backdrop-filter: blur(18px);
-  padding-top: 7rem;
-  z-index: 450;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2.5rem;
-
-  border-left: 1px solid rgba(0, 255, 255, 0.25);
-  box-shadow: -5px 0 25px rgba(0, 255, 255, 0.3);
-
-  a {
-    font-size: 1.5rem;
-    color: #fff;
-    font-weight: 600;
-    letter-spacing: 1px;
-    transition: 0.3s;
-
-    &:hover {
-      color: #00eaff;
-      transform: translateX(10px);
-    }
-  }
-`;
-
+/* ========================================================= */
+/*                       COMPONENT                            */
+/* ========================================================= */
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [active, setActive] = useState("home");
+  const [active, setActive] = useState("about");
   const [shrink, setShrink] = useState(false);
 
-  // Scroll Listener for Shrink Effect
+  const linkRefs = {
+    about: useRef(null),
+    skills: useRef(null),
+    projects: useRef(null),
+    contact: useRef(null),
+  };
+
+  const [underlinePos, setUnderlinePos] = useState({
+    width: 0,
+    left: 0,
+  });
+
+  /* ACTIVE UNDERLINE POSITION UPDATE */
   useEffect(() => {
-    const handleScroll = () => {
-      setShrink(window.scrollY > 60);
-    };
+    const el = linkRefs[active].current;
+    if (el) {
+      setUnderlinePos({
+        width: el.offsetWidth,
+        left: el.offsetLeft,
+      });
+    }
+  }, [active]);
+
+  /* SCROLL SHRINK */
+  useEffect(() => {
+    const handleScroll = () => setShrink(window.scrollY > 60);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Update active link on scroll
+  /* SCROLL ACTIVE SECTION SET */
   useEffect(() => {
     const sections = ["about", "skills", "projects", "contact"];
 
-    const onScroll = () => {
+    const scrollHandler = () => {
       sections.forEach((id) => {
-        const s = document.getElementById(id);
-        if (s) {
-          const rect = s.getBoundingClientRect();
-          if (rect.top <= 120 && rect.bottom >= 120) {
-            setActive(id);
-          }
+        const sec = document.getElementById(id);
+        if (sec) {
+          const rect = sec.getBoundingClientRect();
+          if (rect.top <= 120 && rect.bottom >= 120) setActive(id);
         }
       });
     };
 
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("scroll", scrollHandler);
+    return () => window.removeEventListener("scroll", scrollHandler);
   }, []);
 
   return (
     <>
-      <NavWrapper shrink={shrink}>
+      <NavWrapper $shrink={shrink}>
         <Brand>Kuncham Venkatesh</Brand>
 
-        {/* Desktop Links */}
+        {/* DESKTOP LINKS */}
         <Links>
-          <NavLink href="#about" active={active === "about"}>About</NavLink>
-          <NavLink href="#skills" active={active === "skills"}>Skills</NavLink>
-          <NavLink href="#projects" active={active === "projects"}>Projects</NavLink>
-          <NavLink href="#contact" active={active === "contact"}>Contact</NavLink>
+          <GlowBubble
+            layout
+            transition={{ type: "spring", stiffness: 120, damping: 10 }}
+            style={{ width: underlinePos.width + 20, left: underlinePos.left - 10 }}
+          />
+
+          <Underline
+            layout
+            transition={{ type: "spring", stiffness: 150, damping: 12 }}
+            style={{ width: underlinePos.width, left: underlinePos.left }}
+          />
+
+          {["about", "skills", "projects", "contact"].map((item) => (
+            <NavLink
+              key={item}
+              ref={linkRefs[item]}
+              href={`#${item}`}
+              $active={active === item}
+              onClick={() => setActive(item)}
+            >
+              {item.charAt(0).toUpperCase() + item.slice(1)}
+            </NavLink>
+          ))}
         </Links>
 
-        {/* Mobile Icon */}
+        {/* MOBILE ICON */}
         <MenuIcon onClick={() => setIsOpen(true)}>
           <FaBars />
         </MenuIcon>
       </NavWrapper>
 
-      {/* Mobile Menu */}
+      {/* MOBILE MENU */}
       <AnimatePresence>
         {isOpen && (
           <>
@@ -199,6 +251,7 @@ export default function Navbar() {
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
             />
+
             <MobileMenu
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
@@ -208,18 +261,19 @@ export default function Navbar() {
                 onClick={() => setIsOpen(false)}
                 style={{
                   position: "absolute",
-                  top: "20px",
-                  right: "20px",
-                  fontSize: "1.9rem",
+                  top: 20,
+                  right: 20,
+                  fontSize: "1.8rem",
                   color: "#00eaff",
                   cursor: "pointer",
                 }}
               />
 
-              <a href="#about" onClick={() => setIsOpen(false)}>About</a>
-              <a href="#skills" onClick={() => setIsOpen(false)}>Skills</a>
-              <a href="#projects" onClick={() => setIsOpen(false)}>Projects</a>
-              <a href="#contact" onClick={() => setIsOpen(false)}>Contact</a>
+              {["about", "skills", "projects", "contact"].map((item) => (
+                <a href={`#${item}`} key={item} onClick={() => setIsOpen(false)}>
+                  {item.charAt(0).toUpperCase() + item.slice(1)}
+                </a>
+              ))}
             </MobileMenu>
           </>
         )}

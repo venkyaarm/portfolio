@@ -5,14 +5,12 @@ import { FaGithub, FaLinkedin, FaInstagram, FaEnvelope, FaWhatsapp } from "react
 
 /* ------------------ ANIMATIONS ------------------ */
 
-// Floating icons
 const float = keyframes`
   0% { transform: translateY(0); }
   50% { transform: translateY(-6px); }
   100% { transform: translateY(0); }
 `;
 
-// Color cycle ONLY for your name letters
 const nameColorCycle = keyframes`
   0% { color: #ff0040; }
   15% { color: #ff8c00; }
@@ -23,14 +21,12 @@ const nameColorCycle = keyframes`
   100% { color: #ff0040; }
 `;
 
-// Particles float upward
 const particleFloat = keyframes`
   0% { transform: translateY(0) rotate(0); opacity: 0.2; }
   50% { opacity: 0.8; }
   100% { transform: translateY(-120px) rotate(360deg); opacity: 0; }
 `;
 
-// Subtle glowing ring behind name
 const glowWave = keyframes`
   0% { transform: scale(1) rotate(0deg); opacity: 0.5; }
   50% { transform: scale(1.1) rotate(180deg); opacity: 0.9; }
@@ -50,16 +46,15 @@ const HeroSection = styled.section`
   position: relative;
   overflow: hidden;
   color: #fff;
-  padding: 0 1rem;
   text-align: center;
+  padding: 0 1rem;
 
   @media (max-width: 480px) {
-    padding: 0 0.4rem;
     height: 100vh;
+    padding: 0 0.6rem;
   }
 `;
 
-/* Background spotlight */
 const Spotlight = styled.div`
   position: absolute;
   width: 380px;
@@ -71,112 +66,101 @@ const Spotlight = styled.div`
   z-index: 0;
 
   @media (max-width: 480px) {
-    width: 260px;
-    height: 260px;
-    top: 40%;
+    width: 240px;
+    height: 240px;
+    top: 45%;
   }
 `;
 
-/* Particles */
+/* ------------------ PARTICLES ------------------ */
+
 const Particle = styled.div`
   position: absolute;
   border-radius: 50%;
   background: rgba(0, 255, 255, 0.4);
-  width: ${(p) => p.size}px;
-  height: ${(p) => p.size}px;
-  top: ${(p) => p.top}%;
-  left: ${(p) => p.left}%;
-  animation: ${particleFloat} ${(p) => p.duration}s linear infinite;
+  width: ${(p) => p.$size}px;
+  height: ${(p) => p.$size}px;
+  top: ${(p) => p.$top}%;
+  left: ${(p) => p.$left}%;
+  animation: ${particleFloat} ${(p) => p.$duration}s linear infinite;
 
   @media (max-width: 480px) {
-    width: ${(p) => p.size * 0.55}px;
-    height: ${(p) => p.size * 0.55}px;
+    width: ${(p) => p.$size * 0.55}px;
+    height: ${(p) => p.$size * 0.55}px;
   }
 `;
 
-/* ------------------ TITLE ------------------ */
+/* ------------------ NAME LETTER ------------------ */
+
+const NameLetter = styled.span`
+  display: inline-block;
+  animation: ${nameColorCycle} 2s linear infinite;
+  animation-delay: ${(p) => p.$delay}s;
+  margin: 0 3px;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-10px) scale(1.25);
+    transition: 0.3s;
+  }
+
+  @media (max-width: 480px) {
+    margin: 0 1px;
+    font-size: 1.6rem;
+  }
+`;
+
+/* ------------------ TITLE AREA ------------------ */
 
 const TitleWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   z-index: 2;
-  position: relative;
 `;
 
 const Line = styled.h1`
   font-size: 3rem;
   font-weight: 800;
-  display: flex;
   margin: 0.15rem 0;
+  display: flex;
 
-  /* HELLO IM stays white */
+  @media (max-width: 480px) {
+    font-size: 1.8rem;
+  }
+
   &.plain span {
     color: white;
   }
-
-  /* Name letters animate individually */
-  &.name span {
-    animation: ${nameColorCycle} 2s linear infinite;
-    animation-delay: ${(props) => props.delay}s;
-  }
-
-  span {
-    margin: 0 3px;
-    display: inline-block;
-    cursor: pointer;
-
-    &:hover {
-      transform: translateY(-10px) scale(1.25);
-      transition: 0.3s;
-    }
-  }
-
-  @media (max-width: 480px) {
-    font-size: 1.7rem;
-    span {
-      margin: 0 1px;
-    }
-  }
 `;
 
-/* Glowing animated wave ring */
-const GlowWave = styled.div`
+const GlowWaveDiv = styled.div`
   width: 210px;
   height: 210px;
   border-radius: 50%;
   position: absolute;
   top: -30px;
-  background: conic-gradient(
-    rgba(0,255,255,0.3),
-    rgba(255,0,80,0.3),
-    rgba(255,255,0,0.3),
-    rgba(0,255,120,0.3),
-    rgba(0,255,255,0.3)
-  );
-  filter: blur(45px);
   animation: ${glowWave} 6s linear infinite;
-  z-index: -1;
 
   @media (max-width: 480px) {
     width: 130px;
     height: 130px;
-    top: -20px;
+    top: -10px;
   }
 `;
 
 /* ------------------ SUBTITLE ------------------ */
 
 const Subtitle = styled(motion.h2)`
-  margin-top: 0.6rem;
-  font-size: 1.35rem;
+  margin-top: 0.5rem;
+  font-size: 1.3rem;
   background: linear-gradient(90deg, #00eaff, #ffffff);
   -webkit-background-clip: text;
   color: transparent;
-  font-weight: 500;
 
   @media (max-width: 480px) {
     font-size: 1rem;
+    margin-top: 0.3rem;
   }
 `;
 
@@ -185,12 +169,11 @@ const Subtitle = styled(motion.h2)`
 const Description = styled(motion.p)`
   font-size: 1rem;
   max-width: 650px;
-  margin-top: 0.7rem;
-  line-height: 1.6;
+  margin-top: 0.6rem;
   color: #dffbff;
 
   @media (max-width: 480px) {
-    font-size: 0.92rem;
+    font-size: 0.85rem;
     padding: 0 4px;
   }
 `;
@@ -198,20 +181,21 @@ const Description = styled(motion.p)`
 /* ------------------ SOCIAL ICONS ------------------ */
 
 const SocialContainer = styled.div`
-  margin-top: 1.7rem;
+  margin-top: 1.2rem;
   display: flex;
-  gap: 1.4rem;
+  gap: 1.3rem;
   animation: ${float} 5s ease-in-out infinite;
 
   @media (max-width: 480px) {
-    gap: 0.9rem;
+    gap: 0.8rem;
+    margin-top: 1rem;
   }
 `;
 
 const IconLink = styled.a`
   font-size: 2rem;
   color: #00ffff;
-  transition: 0.3s ease;
+  transition: 0.3s;
 
   &:hover {
     color: #ffd700;
@@ -219,7 +203,7 @@ const IconLink = styled.a`
   }
 
   @media (max-width: 480px) {
-    font-size: 1.5rem;
+    font-size: 1.45rem;
   }
 `;
 
@@ -230,63 +214,52 @@ export default function Hero() {
 
   return (
     <HeroSection id="home">
-
       <Spotlight />
 
       {[...Array(18)].map((_, i) => (
         <Particle
           key={i}
-          size={6 + Math.random() * 9}
-          top={Math.random() * 100}
-          left={Math.random() * 100}
-          duration={3 + Math.random() * 4}
+          $size={6 + Math.random() * 9}
+          $top={Math.random() * 100}
+          $left={Math.random() * 100}
+          $duration={3 + Math.random() * 4}
         />
       ))}
 
       <TitleWrapper>
-        <GlowWave />
+        <GlowWaveDiv />
 
-        {/* Plain greeting - NO ANIMATION */}
         <Line className="plain">
           {"Hello, I'm".split("").map((ch, i) => (
             <span key={i}>{ch}</span>
           ))}
         </Line>
 
-        {/* Animated Name ONLY */}
         <Line className="name">
           {name.split("").map((ch, i) => (
-            <span key={i} style={{ animationDelay: `${i * 0.12}s` }}>
+            <NameLetter key={i} $delay={i * 0.12}>
               {ch}
-            </span>
+            </NameLetter>
           ))}
         </Line>
       </TitleWrapper>
 
-      <Subtitle
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-      >
+      <Subtitle initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         BCA Student | AI & Web Developer | Creative Innovator
       </Subtitle>
 
-      <Description
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5, duration: 1 }}
-      >
-        Passionate about building intelligent and interactive web applications. Skilled in React, Node.js, and AI integration, I love transforming ideas into visually appealing, high-performance solutions.
+      <Description initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}>
+        Passionate about building intelligent and interactive web applications.
+        Skilled in React, Node.js, and AI integration.
       </Description>
 
       <SocialContainer>
         <IconLink href="https://github.com/venkyaarm" target="_blank"><FaGithub /></IconLink>
         <IconLink href="https://linkedin.com/in/venkatesh-kuncham-120531307" target="_blank"><FaLinkedin /></IconLink>
         <IconLink href="https://instagram.com/venky__x8" target="_blank"><FaInstagram /></IconLink>
-        <IconLink href="mailto:venkatesh.k@example.com"><FaEnvelope /></IconLink>
+        <IconLink href="mailto:venkesh.k@example.com"><FaEnvelope /></IconLink>
         <IconLink href="https://wa.me/918125522139" target="_blank"><FaWhatsapp /></IconLink>
       </SocialContainer>
-
     </HeroSection>
   );
 }

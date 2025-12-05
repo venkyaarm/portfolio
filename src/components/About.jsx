@@ -5,28 +5,24 @@ import { FaFilePdf, FaDownload } from "react-icons/fa";
 
 /* ------------------ GLOBAL ANIMATIONS ------------------ */
 
-// 1. Neon border animation
 const neonBorder = keyframes`
   0% { box-shadow: 0 0 10px #00eaff, 0 0 20px #00eaff; }
   50% { box-shadow: 0 0 20px #ff00aa, 0 0 40px #ff00aa; }
   100% { box-shadow: 0 0 10px #00eaff, 0 0 20px #00eaff; }
 `;
 
-// 2. Floating particles
 const floatParticle = keyframes`
   0% { transform: translateY(0px) scale(1); opacity: 0.6; }
   50% { transform: translateY(-20px) scale(1.3); opacity: 1; }
   100% { transform: translateY(0px) scale(1); opacity: 0.6; }
 `;
 
-// 3. Image breathing
 const breathe = keyframes`
   0% { transform: scale(1); }
   50% { transform: scale(1.02); }
   100% { transform: scale(1); }
 `;
 
-// 4. Wave Background
 const waveMove = keyframes`
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
@@ -48,7 +44,6 @@ const Section = styled.section`
   }
 `;
 
-/* Animated Background Wave */
 const Wave = styled.div`
   position: absolute;
   top: 0;
@@ -63,20 +58,18 @@ const Wave = styled.div`
   }
 `;
 
-/* Floating particles */
 const Particle = styled.div`
   position: absolute;
-  width: ${(p) => p.size}px;
-  height: ${(p) => p.size}px;
+  width: ${(p) => p.$size}px;
+  height: ${(p) => p.$size}px;
   background: rgba(0,255,255,0.5);
   border-radius: 50%;
-  top: ${(p) => p.top}%;
-  left: ${(p) => p.left}%;
+  top: ${(p) => p.$top}%;
+  left: ${(p) => p.$left}%;
   filter: blur(2px);
   animation: ${floatParticle} ${(p) => 3 + Math.random() * 3}s ease-in-out infinite;
 `;
 
-/* Content Layout */
 const Container = styled.div`
   display: flex;
   justify-content: space-between;
@@ -145,7 +138,6 @@ const ButtonContainer = styled.div`
   justify-content: center;
 `;
 
-/* Buttons */
 const ResumeButton = styled(motion.a)`
   padding: 0.9rem 1.8rem;
   border-radius: 10px;
@@ -216,8 +208,6 @@ const ProfileImage = styled.img`
   animation: ${breathe} 4s infinite ease-in-out;
 `;
 
-/* ------------------ ANIMATION VARIANTS ------------------ */
-
 const fadeUp = {
   hidden: { opacity: 0, y: 60 },
   visible: { opacity: 1, y: 0, transition: { duration: 1 } },
@@ -238,18 +228,16 @@ export default function About() {
     <Section id="about" ref={ref}>
       <Wave />
 
-      {/* Random Floating Particles */}
       {[...Array(12)].map((_, i) => (
         <Particle
           key={i}
-          size={6 + Math.random() * 10}
-          top={Math.random() * 100}
-          left={Math.random() * 100}
+          $size={6 + Math.random() * 10}
+          $top={Math.random() * 100}
+          $left={Math.random() * 100}
         />
       ))}
 
       <Container>
-        {/* LEFT SECTION */}
         <Content>
           <Title initial="hidden" animate={controls} variants={fadeUp}>
             About Me
@@ -279,7 +267,6 @@ export default function About() {
           </ButtonContainer>
         </Content>
 
-        {/* RIGHT PROFILE IMAGE */}
         <ProfileWrapper initial="hidden" animate={controls} variants={fadeUp}>
           <ImageBox>
             <ProfileImage src="/profile.jpg" alt="Profile" />

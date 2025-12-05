@@ -69,21 +69,27 @@ const Card = styled(motion.div)`
   }
 `;
 
+/* ------------------------------------------------------------ */
+/*                   UPDATED TEXT AREA (DESKTOP ONLY)           */
+/* ------------------------------------------------------------ */
+
 const CardContent = styled.div`
-  flex: 1.3;
-  padding-right: 1.5rem;
+  flex: 1.4;
+  padding-right: 2.2rem;
+  max-width: 620px;
 
   h3 {
-    font-size: 2rem;
+    font-size: 2.1rem;
     margin-bottom: 1rem;
     color: #ffcc00;
   }
 
   p {
-    line-height: 1.7;
-    font-size: 1.05rem;
+    line-height: 1.85;
+    font-size: 1.15rem;
     color: #e0f7ff;
-    margin-bottom: 1.8rem;
+    margin-bottom: 2rem;
+    text-align: justify;
   }
 
   .links {
@@ -94,7 +100,13 @@ const CardContent = styled.div`
 
   @media (max-width: 768px) {
     padding-right: 0;
+    max-width: 100%;
     text-align: center;
+
+    p {
+      font-size: 1rem;
+      text-align: center;
+    }
   }
 `;
 
@@ -132,31 +144,28 @@ const ViewButton = styled.a`
 `;
 
 /* ------------------------------------------------------------ */
-/*                         PROJECT IMAGE                         */
+/*           UPDATED IMAGE STYLE — SAME SIZE FOR ALL IMAGES      */
 /* ------------------------------------------------------------ */
 
 const CardImage = styled.div`
   flex: 1;
+  width: 420px;
+  height: 260px;
+  border-radius: 14px;
   overflow: hidden;
-  border-radius: 12px;
   box-shadow: 0 0 20px rgba(0,255,255,0.2);
 
   img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: cover; /* ensures same shape always */
     transition: 0.5s ease;
-
-    &:hover {
-      transform: scale(1.12);
-      filter: brightness(1.2);
-    }
   }
 
   @media (max-width: 768px) {
     width: 100%;
-    margin-top: 1.5rem;
     height: 230px;
+    margin-top: 1.5rem;
   }
 `;
 
@@ -181,42 +190,42 @@ export default function Projects() {
   const projects = [
     {
       title: "AI Q&A App",
-      desc: "An AI-powered real-time Q&A application built with React.js and Gemini API for dynamic intelligent responses.",
+      desc: "An AI-powered real-time Q&A application built with React.js and Gemini API for intelligent responses.",
       github: "https://github.com/venkyaarm/Venky-Q-and-A-app",
       demo: "https://venky-q-and-a-app.netlify.app/",
       image: "/projects/ai-qa.png",
     },
     {
       title: "PPT Generator",
-      desc: "An AI-powered automatic presentation generator that creates structured slides instantly based on topic inputs.",
+      desc: "An AI-powered presentation tool that generates slides instantly based on topic input with smart formatting.",
       github: "https://github.com/venkyaarm/Venkt-PPT",
       demo: "https://venky-ppt.netlify.app/",
       image: "/projects/ppt-generator.png",
     },
     {
       title: "QR Generator",
-      desc: "A fast QR creator for URLs, text and files with customization options, designed for smooth user experience.",
+      desc: "A customizable QR generator that allows users to create high-quality QR codes for text, URLs, and files.",
       github: "https://github.com/venkyaarm/venkyQR",
       demo: "https://venkyqr.netlify.app/",
       image: "/projects/qr-generator.png",
     },
     {
       title: "Resume App",
-      desc: "A digital resume builder with AI-based analysis, smart recommendations and interactive UI.",
+      desc: "A modern resume builder with AI-powered analysis, skill suggestions, instant preview, and elegant UI.",
       github: "https://github.com/venkyaarm/venky-resume",
       demo: "https://venkyresumeapp.netlify.app/",
       image: "/projects/resume-app.png",
     },
     {
       title: "Wood Interior",
-      desc: "A dual-module interior furniture website with admin product uploads & user purchase system.",
+      desc: "An interior furniture app with separate admin and user modules for product uploads and secure purchases.",
       github: "https://github.com/venkyaarm/wood-interior-website",
       demo: "https://woodeninterior.netlify.app/",
       image: "/projects/wood.png",
     },
     {
       title: "Image Puzzle",
-      desc: "An interactive image puzzle game with random generator and smooth animations.",
+      desc: "A fun puzzle game with animated tiles and random puzzle generator for unlimited gameplay.",
       github: "https://github.com/venkyaarm/Venky-puzzle",
       demo: "https://venkypuzzle.netlify.app/",
       image: "/projects/puzzle.png",
