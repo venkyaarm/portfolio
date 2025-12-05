@@ -54,6 +54,7 @@ const Card = styled(motion.div)`
   backdrop-filter: blur(10px);
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(0, 255, 255, 0.15);
+
   box-shadow: 0 0 25px rgba(0, 255, 255, 0.15);
   transition: 0.35s ease;
 
@@ -69,7 +70,7 @@ const Card = styled(motion.div)`
 `;
 
 /* ------------------------------------------------------------ */
-/*                        TEXT CONTENT                           */
+/*                   UPDATED TEXT AREA (DESKTOP ONLY)           */
 /* ------------------------------------------------------------ */
 
 const CardContent = styled.div`
@@ -143,7 +144,7 @@ const ViewButton = styled.a`
 `;
 
 /* ------------------------------------------------------------ */
-/*                 PROJECT IMAGE â€” FIXED SIZE                    */
+/*           UPDATED IMAGE STYLE — SAME SIZE FOR ALL IMAGES      */
 /* ------------------------------------------------------------ */
 
 const CardImage = styled.div`
@@ -157,7 +158,7 @@ const CardImage = styled.div`
   img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: cover; /* ensures same shape always */
     transition: 0.5s ease;
   }
 
@@ -169,7 +170,7 @@ const CardImage = styled.div`
 `;
 
 /* ------------------------------------------------------------ */
-/*                 ANIMATION VARIANTS                           */
+/*                   SCROLL ANIMATION VARIANTS                  */
 /* ------------------------------------------------------------ */
 
 const cardVariant = {
@@ -182,7 +183,7 @@ const cardVariant = {
 };
 
 /* ------------------------------------------------------------ */
-/*                       COMPONENT                               */
+/*                           COMPONENT                           */
 /* ------------------------------------------------------------ */
 
 export default function Projects() {
