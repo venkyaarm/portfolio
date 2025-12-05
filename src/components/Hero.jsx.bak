@@ -12,29 +12,29 @@ const float = keyframes`
   100% { transform: translateY(0); }
 `;
 
-// Color cycle ONLY for your name letters
-const nameColorCycle = keyframes`
+// Each letter color animation
+const letterColorCycle = keyframes`
   0% { color: #ff0040; }
   15% { color: #ff8c00; }
   30% { color: #ffee00; }
-  50% { color: #32ff7e; }
-  70% { color: #00eaff; }
-  85% { color: #8f00ff; }
+  45% { color: #32ff7e; }
+  60% { color: #00eaff; }
+  75% { color: #8f00ff; }
   100% { color: #ff0040; }
 `;
 
-// Particles float upward
-const particleFloat = keyframes`
-  0% { transform: translateY(0) rotate(0); opacity: 0.2; }
-  50% { opacity: 0.8; }
-  100% { transform: translateY(-120px) rotate(360deg); opacity: 0; }
+/* Glow bar */
+const glowPulse = keyframes`
+  0% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
+  100% { opacity: 0.5; transform: scale(1); }
 `;
 
-// Subtle glowing ring behind name
-const glowWave = keyframes`
-  0% { transform: scale(1) rotate(0deg); opacity: 0.5; }
-  50% { transform: scale(1.1) rotate(180deg); opacity: 0.9; }
-  100% { transform: scale(1) rotate(360deg); opacity: 0.5; }
+/* Particle float */
+const particleFloat = keyframes`
+  0% { transform: translateY(0) rotate(0); opacity: 0.4; }
+  50% { opacity: 1; }
+  100% { transform: translateY(-120px) rotate(360deg); opacity: 0; }
 `;
 
 /* ------------------ HERO SECTION ------------------ */
@@ -42,7 +42,7 @@ const glowWave = keyframes`
 const HeroSection = styled.section`
   height: 100vh;
   width: 100%;
-  background: linear-gradient(135deg, #09131c, #071a29);
+  background: linear-gradient(135deg, #0b1721, #071a29);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -51,37 +51,18 @@ const HeroSection = styled.section`
   overflow: hidden;
   color: #fff;
   padding: 0 1rem;
-  text-align: center;
 
   @media (max-width: 480px) {
-    padding: 0 0.4rem;
-    height: 100vh;
+    padding: 0 0.6rem;
   }
 `;
 
-/* Background spotlight */
-const Spotlight = styled.div`
-  position: absolute;
-  width: 380px;
-  height: 380px;
-  background: radial-gradient(circle, rgba(0, 255, 255, 0.2), transparent);
-  border-radius: 50%;
-  top: 35%;
-  filter: blur(60px);
-  z-index: 0;
+/* ------------------ PARTICLES ------------------ */
 
-  @media (max-width: 480px) {
-    width: 260px;
-    height: 260px;
-    top: 40%;
-  }
-`;
-
-/* Particles */
 const Particle = styled.div`
   position: absolute;
   border-radius: 50%;
-  background: rgba(0, 255, 255, 0.4);
+  background: rgba(0, 255, 255, 0.45);
   width: ${(p) => p.size}px;
   height: ${(p) => p.size}px;
   top: ${(p) => p.top}%;
@@ -89,8 +70,8 @@ const Particle = styled.div`
   animation: ${particleFloat} ${(p) => p.duration}s linear infinite;
 
   @media (max-width: 480px) {
-    width: ${(p) => p.size * 0.55}px;
-    height: ${(p) => p.size * 0.55}px;
+    width: ${(p) => p.size * 0.6}px;
+    height: ${(p) => p.size * 0.6}px;
   }
 `;
 
@@ -100,31 +81,20 @@ const TitleWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 2;
-  position: relative;
 `;
 
 const Line = styled.h1`
   font-size: 3rem;
   font-weight: 800;
+  margin: 0.2rem 0;
   display: flex;
-  margin: 0.15rem 0;
-
-  /* HELLO IM stays white */
-  &.plain span {
-    color: white;
-  }
-
-  /* Name letters animate individually */
-  &.name span {
-    animation: ${nameColorCycle} 2s linear infinite;
-    animation-delay: ${(props) => props.delay}s;
-  }
 
   span {
-    margin: 0 3px;
+    margin: 0 2px;
     display: inline-block;
     cursor: pointer;
+    animation: ${letterColorCycle} 2.5s linear infinite;
+    animation-delay: ${(props) => props.delay}s;
 
     &:hover {
       transform: translateY(-10px) scale(1.25);
@@ -132,48 +102,38 @@ const Line = styled.h1`
     }
   }
 
+  @media (max-width: 768px) {
+    font-size: 2.2rem;
+  }
   @media (max-width: 480px) {
-    font-size: 1.7rem;
+    font-size: 1.6rem;
     span {
       margin: 0 1px;
     }
   }
 `;
 
-/* Glowing animated wave ring */
-const GlowWave = styled.div`
-  width: 210px;
-  height: 210px;
-  border-radius: 50%;
-  position: absolute;
-  top: -30px;
-  background: conic-gradient(
-    rgba(0,255,255,0.3),
-    rgba(255,0,80,0.3),
-    rgba(255,255,0,0.3),
-    rgba(0,255,120,0.3),
-    rgba(0,255,255,0.3)
-  );
-  filter: blur(45px);
-  animation: ${glowWave} 6s linear infinite;
-  z-index: -1;
+/* Glow bar */
+const GlowBar = styled.div`
+  width: 150px;
+  height: 8px;
+  margin-top: 6px;
+  background: radial-gradient(circle, #00eaff, transparent);
+  border-radius: 12px;
+  filter: blur(5px);
+  animation: ${glowPulse} 2.5s infinite;
 
   @media (max-width: 480px) {
-    width: 130px;
-    height: 130px;
-    top: -20px;
+    width: 100px;
   }
 `;
 
 /* ------------------ SUBTITLE ------------------ */
 
 const Subtitle = styled(motion.h2)`
-  margin-top: 0.6rem;
-  font-size: 1.35rem;
-  background: linear-gradient(90deg, #00eaff, #ffffff);
-  -webkit-background-clip: text;
-  color: transparent;
-  font-weight: 500;
+  margin-top: 0.7rem;
+  font-size: 1.3rem;
+  color: #cfffff;
 
   @media (max-width: 480px) {
     font-size: 1rem;
@@ -184,38 +144,33 @@ const Subtitle = styled(motion.h2)`
 
 const Description = styled(motion.p)`
   font-size: 1rem;
+  color: #d7f7ff;
   max-width: 650px;
   margin-top: 0.7rem;
   line-height: 1.6;
-  color: #dffbff;
 
   @media (max-width: 480px) {
-    font-size: 0.92rem;
-    padding: 0 4px;
+    font-size: 0.9rem;
   }
 `;
 
-/* ------------------ SOCIAL ICONS ------------------ */
+/* ------------------ SOCIAL ICONS (NO BORDER BOX) ------------------ */
 
 const SocialContainer = styled.div`
-  margin-top: 1.7rem;
+  margin-top: 1.8rem;
   display: flex;
   gap: 1.4rem;
-  animation: ${float} 5s ease-in-out infinite;
-
-  @media (max-width: 480px) {
-    gap: 0.9rem;
-  }
+  animation: ${float} 4s ease-in-out infinite;
 `;
 
 const IconLink = styled.a`
   font-size: 2rem;
   color: #00ffff;
-  transition: 0.3s ease;
+  transition: 0.3s;
 
   &:hover {
+    transform: scale(1.3);
     color: #ffd700;
-    transform: scale(1.25);
   }
 
   @media (max-width: 480px) {
@@ -230,13 +185,10 @@ export default function Hero() {
 
   return (
     <HeroSection id="home">
-
-      <Spotlight />
-
-      {[...Array(18)].map((_, i) => (
+      {[...Array(15)].map((_, i) => (
         <Particle
           key={i}
-          size={6 + Math.random() * 9}
+          size={8 + Math.random() * 8}
           top={Math.random() * 100}
           left={Math.random() * 100}
           duration={3 + Math.random() * 4}
@@ -244,23 +196,21 @@ export default function Hero() {
       ))}
 
       <TitleWrapper>
-        <GlowWave />
-
-        {/* Plain greeting - NO ANIMATION */}
-        <Line className="plain">
-          {"Hello, I'm".split("").map((ch, i) => (
-            <span key={i}>{ch}</span>
+        {/* Hello I'm */}
+        <Line>
+          {"Hello, I'm".split("").map((char, i) => (
+            <span key={i} delay={i * 0.15}>{char}</span>
           ))}
         </Line>
 
-        {/* Animated Name ONLY */}
-        <Line className="name">
-          {name.split("").map((ch, i) => (
-            <span key={i} style={{ animationDelay: `${i * 0.12}s` }}>
-              {ch}
-            </span>
+        {/* Animated color changing name */}
+        <Line>
+          {name.split("").map((char, i) => (
+            <span key={i} delay={i * 0.12}>{char}</span>
           ))}
         </Line>
+
+        <GlowBar />
       </TitleWrapper>
 
       <Subtitle
@@ -274,7 +224,7 @@ export default function Hero() {
       <Description
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.5, duration: 1 }}
+        transition={{ delay: 0.4, duration: 1 }}
       >
         Passionate about building intelligent and interactive web applications. Skilled in React, Node.js, and AI integration, I love transforming ideas into visually appealing, high-performance solutions.
       </Description>

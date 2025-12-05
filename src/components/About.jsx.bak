@@ -1,0 +1,301 @@
+import React, { useRef, useEffect } from "react";
+import styled, { keyframes } from "styled-components";
+import { motion, useAnimation, useInView } from "framer-motion";
+import { FaFilePdf, FaDownload } from "react-icons/fa";
+
+/* ------------------------------------------------------------ */
+/*          NEW NEXT-GEN CINEMATIC ANIMATION BACKGROUND         */
+/* ------------------------------------------------------------ */
+
+// Smooth flowing glass wave
+const glassWave = keyframes`
+  0% { transform: translateX(-40%) skewX(12deg); opacity: 0.12; }
+  50% { transform: translateX(30%) skewX(-12deg); opacity: 0.22; }
+  100% { transform: translateX(-40%) skewX(12deg); opacity: 0.12; }
+`;
+
+// Light aura pulsation
+const auraPulse = keyframes`
+  0% { opacity: 0.15; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(1.15); }
+  100% { opacity: 0.15; transform: scale(1); }
+`;
+
+// Digital scanning streaks
+const streakMove = keyframes`
+  0% { top: -60%; opacity: 0; }
+  50% { opacity: 0.4; }
+  100% { top: 120%; opacity: 0; }
+`;
+
+// Image breathing animation
+const breathe = keyframes`
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+`;
+
+/* ------------------------------------------------------------ */
+/*                         MAIN SECTION                          */
+/* ------------------------------------------------------------ */
+
+const Section = styled.section`
+  padding: 7rem 12%;
+  background: linear-gradient(135deg, #08131c, #0c1e2d);
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  margin-top: 5rem;
+  box-shadow: 0 0 40px rgba(0,255,255,0.12);
+
+  @media (max-width: 900px) {
+    padding: 4rem 1.5rem;
+  }
+`;
+
+/* --- GLASS ANIMATION LAYER --- */
+const GlassWave = styled.div`
+  position: absolute;
+  top: 0;
+  left: -40%;
+  width: 180%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(0,255,255,0.13),
+    rgba(255,0,180,0.15),
+    rgba(0,255,255,0.13)
+  );
+  filter: blur(50px);
+  animation: ${glassWave} 18s infinite ease-in-out;
+  pointer-events: none;
+`;
+
+/* --- AURA LIGHT BEHIND CONTENT --- */
+const Aura = styled.div`
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  width: 550px;
+  height: 550px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(0,255,255,0.3), transparent 70%);
+  filter: blur(80px);
+  border-radius: 50%;
+  animation: ${auraPulse} 6s infinite ease-in-out;
+  pointer-events: none;
+
+  @media (max-width: 480px) {
+    width: 300px;
+    height: 300px;
+  }
+`;
+
+/* --- DIGITAL STREAK --- */
+const Streak = styled.div`
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  background: linear-gradient(to bottom, transparent, rgba(0,255,255,0.18), transparent);
+  filter: blur(20px);
+  animation: ${streakMove} 7s infinite linear;
+  pointer-events: none;
+`;
+
+/* ------------------------------------------------------------ */
+/*                        CONTENT WRAPPER                        */
+/* ------------------------------------------------------------ */
+
+const Container = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 4rem;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 10;
+
+  @media (max-width: 900px) {
+    flex-direction: column-reverse;
+    text-align: center;
+  }
+`;
+
+/* ------------------- LEFT CONTENT -------------------- */
+
+const Content = styled.div`
+  flex: 1.3;
+  color: white;
+  max-width: 650px;
+`;
+
+const Title = styled(motion.h2)`
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #00eaff, #ffffff, #00eaff);
+  -webkit-background-clip: text;
+  color: transparent;
+
+  @media (max-width: 768px) {
+    font-size: 2.4rem;
+  }
+`;
+
+const Description = styled(motion.p)`
+  margin-top: 1.5rem;
+  font-size: 1.15rem;
+  color: #d9f7ff;
+  line-height: 1.8;
+
+  strong {
+    color: #00ffff;
+    text-shadow: 0 0 6px #00eaff;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+`;
+
+const Btn = styled(motion.a)`
+  padding: 0.9rem 1.8rem;
+  border-radius: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1rem;
+  background: ${(p) => p.bg};
+  color: black;
+  transition: 0.3s ease;
+
+  &:hover {
+    transform: scale(1.08);
+    color: white;
+  }
+`;
+
+/* -------------------- RIGHT IMAGE -------------------- */
+
+const ProfileWrapper = styled(motion.div)`
+  flex: 1;
+  max-width: 380px;
+  position: relative;
+`;
+
+/* Glowing frame layers */
+const FrameLayer = styled.div`
+  position: absolute;
+  inset: -18px;
+  border-radius: 24px;
+  background: conic-gradient(
+    rgba(0,255,255,0.4),
+    rgba(255,0,150,0.4),
+    rgba(255,255,0,0.4),
+    rgba(0,255,255,0.4)
+  );
+  filter: blur(35px);
+  z-index: -1;
+  animation: ${auraPulse} 5s infinite ease-in-out;
+`;
+
+const ImageBox = styled.div`
+  width: 100%;
+  height: 380px;
+  border-radius: 22px;
+  overflow: hidden;
+  transition: 0.4s;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  @media (max-width: 768px) {
+    height: 300px;
+  }
+`;
+
+const ProfileImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: ${breathe} 4s infinite ease-in-out;
+`;
+
+/* ------------------------------------------------------------ */
+/*                   ANIMATION VARIANTS                         */
+/* ------------------------------------------------------------ */
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 60 },
+  visible: { opacity: 1, y: 0, transition: { duration: 1 } },
+};
+
+/* ------------------------------------------------------------ */
+/*                         COMPONENT                             */
+/* ------------------------------------------------------------ */
+
+export default function About() {
+  const ref = useRef(null);
+  const inView = useInView(ref, { threshold: 0.2 });
+  const controls = useAnimation();
+
+  useEffect(() => {
+    controls.start(inView ? "visible" : "hidden");
+  }, [inView]);
+
+  return (
+    <Section id="about" ref={ref}>
+      <GlassWave />
+      <Aura />
+      <Streak />
+
+      <Container>
+        {/* LEFT TEXT */}
+        <Content>
+          <Title initial="hidden" animate={controls} variants={fadeUp}>
+            About Me
+          </Title>
+
+          <Description initial="hidden" animate={controls} variants={fadeUp}>
+            I'm <strong>Kuncham Venkatesh</strong>, a dedicated <strong>BCA student</strong> who builds 
+            <strong> intelligent, modern, visually stunning web applications</strong> using 
+            the latest technologies including <strong>React.js</strong> and <strong>Node.js</strong>.
+            <br /><br />
+            My passion lies in creating futuristic, user-centric digital experiences that combine 
+            creativity, AI, and advanced UI/UX concepts.
+            <br /><br />
+            Every project I build aims to inspire, empower, and push the boundaries of what a 
+            web application can do.
+          </Description>
+
+          <ButtonContainer>
+            <Btn bg="linear-gradient(135deg,#00ffff,#ffcc00)" href="/resume.pdf" target="_blank">
+              <FaFilePdf /> View Resume
+            </Btn>
+
+            <Btn bg="linear-gradient(135deg,#ff007f,#00ccff)" href="/resume.pdf" download>
+              <FaDownload /> Download Resume
+            </Btn>
+          </ButtonContainer>
+        </Content>
+
+        {/* RIGHT IMAGE */}
+        <ProfileWrapper initial="hidden" animate={controls} variants={fadeUp}>
+          <FrameLayer />
+          <ImageBox>
+            <ProfileImage src="/profile.jpg" alt="Profile" />
+          </ImageBox>
+        </ProfileWrapper>
+      </Container>
+    </Section>
+  );
+}

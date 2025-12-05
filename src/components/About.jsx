@@ -1,66 +1,136 @@
 import React, { useRef, useEffect } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { motion, useAnimation, useInView } from "framer-motion";
 import { FaFilePdf, FaDownload } from "react-icons/fa";
 
-// 🔹 Section Layout
+/* ------------------ GLOBAL ANIMATIONS ------------------ */
+
+// 1. Neon border animation
+const neonBorder = keyframes`
+  0% { box-shadow: 0 0 10px #00eaff, 0 0 20px #00eaff; }
+  50% { box-shadow: 0 0 20px #ff00aa, 0 0 40px #ff00aa; }
+  100% { box-shadow: 0 0 10px #00eaff, 0 0 20px #00eaff; }
+`;
+
+// 2. Floating particles
+const floatParticle = keyframes`
+  0% { transform: translateY(0px) scale(1); opacity: 0.6; }
+  50% { transform: translateY(-20px) scale(1.3); opacity: 1; }
+  100% { transform: translateY(0px) scale(1); opacity: 0.6; }
+`;
+
+// 3. Image breathing
+const breathe = keyframes`
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+`;
+
+// 4. Wave Background
+const waveMove = keyframes`
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+`;
+
+/* ------------------ SECTION STYLES ------------------ */
+
 const Section = styled.section`
-  padding: 6rem 10%;
+  padding: 7rem 12%;
+  background: linear-gradient(135deg, #09131c, #0c1e2c);
+  border-radius: 28px;
+  position: relative;
+  overflow: hidden;
+  margin-top: 5rem;
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
+
+  @media (max-width: 900px) {
+    padding: 4rem 1.5rem;
+  }
+`;
+
+/* Animated Background Wave */
+const Wave = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 320px;
+  width: 200%;
+  background: radial-gradient(circle, rgba(0,255,255,0.15), transparent 70%);
+  animation: ${waveMove} 12s linear infinite;
+
+  @media (max-width: 480px) {
+    height: 220px;
+  }
+`;
+
+/* Floating particles */
+const Particle = styled.div`
+  position: absolute;
+  width: ${(p) => p.size}px;
+  height: ${(p) => p.size}px;
+  background: rgba(0,255,255,0.5);
+  border-radius: 50%;
+  top: ${(p) => p.top}%;
+  left: ${(p) => p.left}%;
+  filter: blur(2px);
+  animation: ${floatParticle} ${(p) => 3 + Math.random() * 3}s ease-in-out infinite;
+`;
+
+/* Content Layout */
+const Container = styled.div`
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
+  justify-content: space-between;
   gap: 4rem;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
-  margin: 3rem auto;
-  box-shadow: 0px 0px 35px rgba(0, 255, 255, 0.15);
+  align-items: center;
+  flex-wrap: wrap;
 
   @media (max-width: 900px) {
     flex-direction: column-reverse;
     text-align: center;
-    padding: 4rem 2rem;
   }
 `;
 
-// 🔹 Text Section
-const Content = styled.div`
-  flex: 1.4;
-  color: #fff;
-  text-align: left;
-  max-width: 650px;
+/* ------------------ LEFT CONTENT ------------------ */
 
-  @media (max-width: 900px) {
-    text-align: center;
-  }
+const Content = styled.div`
+  flex: 1.3;
+  color: #fff;
+  max-width: 650px;
 `;
 
 const Title = styled(motion.h2)`
-  font-size: 2.5rem;
-  color: #00ffff;
-  margin-bottom: 1.5rem;
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #00eaff, #ffffff, #00eaff);
+  -webkit-background-clip: text;
+  color: transparent;
   position: relative;
 
-  &::after {
-    content: "";
-    display: block;
-    width: 80px;
-    height: 4px;
-    background: #ffcc00;
-    margin-top: 10px;
-    border-radius: 2px;
+  &::before, &::after {
+    content: "<>";
+    position: absolute;
+    font-size: 2rem;
+    top: 0;
+    opacity: 0.6;
   }
+  &::before { left: -40px; }
+  &::after { right: -40px; }
 
   @media (max-width: 768px) {
-    font-size: 2rem;
+    font-size: 2.3rem;
   }
 `;
 
 const Description = styled(motion.p)`
+  margin-top: 1.5rem;
   font-size: 1.15rem;
-  line-height: 1.8;
-  color: #d8e3e7;
-  margin-bottom: 2rem;
+  line-height: 1.7;
+  color: #d8f8ff;
+
+  strong {
+    color: #00ffff;
+    text-shadow: 0 0 5px #00eaff;
+  }
 
   @media (max-width: 768px) {
     font-size: 1rem;
@@ -69,103 +139,72 @@ const Description = styled(motion.p)`
 
 const ButtonContainer = styled.div`
   display: flex;
+  gap: 1.2rem;
+  margin-top: 2rem;
   flex-wrap: wrap;
-  gap: 1rem;
+  justify-content: center;
 `;
 
-// 🔹 View Resume Button
+/* Buttons */
 const ResumeButton = styled(motion.a)`
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.8rem 1.6rem;
+  padding: 0.9rem 1.8rem;
+  border-radius: 10px;
+  font-weight: 700;
   background: linear-gradient(135deg, #00ffff, #ffcc00);
   color: #000;
-  font-weight: 600;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  font-size: 1rem;
-  position: relative;
-  overflow: hidden;
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  transition: 0.3s;
 
   &:hover {
+    transform: scale(1.07);
     background: linear-gradient(135deg, #ffcc00, #00ffff);
-    transform: scale(1.05);
     color: #fff;
   }
 `;
 
-// 🔹 Download Button (Ripple Effect)
 const DownloadButton = styled(motion.a)`
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.8rem 1.6rem;
+  padding: 0.9rem 1.8rem;
+  border-radius: 10px;
+  font-weight: 700;
   background: linear-gradient(135deg, #ff007f, #00ccff);
   color: #000;
-  font-weight: 600;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  font-size: 1rem;
-  position: relative;
-  overflow: hidden;
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  transition: 0.3s;
+  animation: ${neonBorder} 3s infinite;
 
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.07);
     color: #fff;
   }
-
-  &::after {
-    content: "";
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    background: rgba(255, 255, 255, 0.7);
-    border-radius: 50%;
-    transform: scale(0);
-    opacity: 0;
-    transition: transform 0.5s, opacity 1s;
-  }
-
-  &:active::after {
-    transform: scale(20);
-    opacity: 0;
-    transition: 0s;
-  }
 `;
 
-// 🔹 Profile Section
-const ProfileContainer = styled.div`
+/* ------------------ RIGHT IMAGE ------------------ */
+
+const ProfileWrapper = styled(motion.div)`
   flex: 1;
-  display: flex;
-  justify-content: center;
-  position: relative;
-  max-width: 400px;
-
-  @media (max-width: 900px) {
-    margin-bottom: 2rem;
-  }
+  max-width: 380px;
+  perspective: 1000px;
 `;
 
-const GlowBox = styled(motion.div)`
-  width: 380px;
+const ImageBox = styled.div`
+  width: 100%;
   height: 380px;
-  border-radius: 15px;
-  border: 4px solid transparent;
+  border-radius: 18px;
   overflow: hidden;
-  transition: all 0.4s ease;
-  box-shadow: 0 0 0 transparent;
+  border: 4px solid transparent;
+  animation: ${neonBorder} 4s linear infinite;
+  transition: 0.4s;
+  transform-style: preserve-3d;
 
   &:hover {
-    border-color: #00ffff;
-    box-shadow: 0 0 30px #00ffff, 0 0 70px #00ffff;
-    transform: scale(1.05);
+    transform: rotateY(12deg) rotateX(8deg) scale(1.05);
   }
 
   @media (max-width: 768px) {
-    width: 300px;
     height: 300px;
   }
 `;
@@ -174,87 +213,79 @@ const ProfileImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 15px;
+  animation: ${breathe} 4s infinite ease-in-out;
 `;
 
-// ✨ Animation Variants
+/* ------------------ ANIMATION VARIANTS ------------------ */
+
 const fadeUp = {
   hidden: { opacity: 0, y: 60 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 1.2, ease: "easeOut" },
-  },
+  visible: { opacity: 1, y: 0, transition: { duration: 1 } },
 };
+
+/* ------------------ COMPONENT ------------------ */
 
 export default function About() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { threshold: 0.2 });
+  const inView = useInView(ref, { threshold: 0.2 });
   const controls = useAnimation();
 
   useEffect(() => {
-    if (isInView) {
-      controls.start("visible");
-    } else {
-      controls.start("hidden");
-    }
-  }, [isInView, controls]);
+    controls.start(inView ? "visible" : "hidden");
+  }, [inView]);
 
   return (
     <Section id="about" ref={ref}>
-      {/* Left Side — Description */}
-      <Content>
-        <Title initial="hidden" animate={controls} variants={fadeUp}>
-          About Me
-        </Title>
-        <Description initial="hidden" animate={controls} variants={fadeUp}>
-          I'm <strong>Kuncham Venkatesh</strong>, a passionate <strong>BCA student</strong> with a deep interest in
-          <strong> AI-driven and API-integrated web applications</strong>. I specialize in building modern, visually engaging,
-          and intelligent digital experiences using <strong>React.js</strong> and <strong>Node.js</strong>.
-          <br /><br />
-          My work blends creativity with technical precision — transforming complex ideas into elegant,
-          user-focused interfaces. I enjoy crafting AI-powered applications such as Q&A Systems, Resume Analyzers,
-          and Interactive Web Tools that solve real-world challenges.
-          <br /><br />
-          Beyond development, I’m continuously exploring emerging technologies, improving UI aesthetics,
-          and pushing the boundaries of web interactivity. My goal is to innovate with purpose and create
-          products that inspire and empower users.
-        </Description>
+      <Wave />
 
-        <ButtonContainer>
-          <ResumeButton
-            href="/resume.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            initial="hidden"
-            animate={controls}
-            variants={fadeUp}
-          >
-            <FaFilePdf /> View Resume
-          </ResumeButton>
+      {/* Random Floating Particles */}
+      {[...Array(12)].map((_, i) => (
+        <Particle
+          key={i}
+          size={6 + Math.random() * 10}
+          top={Math.random() * 100}
+          left={Math.random() * 100}
+        />
+      ))}
 
-          <DownloadButton
-            href="/resume.pdf"
-            download
-            initial="hidden"
-            animate={controls}
-            variants={fadeUp}
-          >
-            <FaDownload /> Download Resume
-          </DownloadButton>
-        </ButtonContainer>
-      </Content>
+      <Container>
+        {/* LEFT SECTION */}
+        <Content>
+          <Title initial="hidden" animate={controls} variants={fadeUp}>
+            About Me
+          </Title>
 
-      {/* Right Side — Profile Picture */}
-      <ProfileContainer>
-        <GlowBox
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={controls}
-          variants={fadeUp}
-        >
-          <ProfileImage src="/profile.jpg" alt="Kuncham Venkatesh" />
-        </GlowBox>
-      </ProfileContainer>
+          <Description initial="hidden" animate={controls} variants={fadeUp}>
+            I'm <strong>Kuncham Venkatesh</strong>, a passionate <strong>BCA student</strong> specializing in 
+            <strong> AI-powered and API-driven web applications</strong>.
+            My focus is on developing visually stunning, intelligent, and interactive experiences using 
+            <strong> React.js</strong>, <strong>Node.js</strong>, and modern UI/UX workflows.
+            <br /><br />
+            I build next-gen tools like **AI Resume Analyzers**, **Q&A Systems**, **Interactive Web Apps**, and high-quality,
+            futuristic interfaces that blend creativity with precision.
+            <br /><br />
+            I'm constantly improving my skill set, exploring new technologies, and pushing boundaries to create 
+            meaningful, powerful, and user-inspired digital products.
+          </Description>
+
+          <ButtonContainer>
+            <ResumeButton href="/resume.pdf" target="_blank">
+              <FaFilePdf /> View Resume
+            </ResumeButton>
+
+            <DownloadButton href="/resume.pdf" download>
+              <FaDownload /> Download Resume
+            </DownloadButton>
+          </ButtonContainer>
+        </Content>
+
+        {/* RIGHT PROFILE IMAGE */}
+        <ProfileWrapper initial="hidden" animate={controls} variants={fadeUp}>
+          <ImageBox>
+            <ProfileImage src="/profile.jpg" alt="Profile" />
+          </ImageBox>
+        </ProfileWrapper>
+      </Container>
     </Section>
   );
 }
