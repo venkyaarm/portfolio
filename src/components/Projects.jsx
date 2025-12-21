@@ -229,6 +229,13 @@ export default function Projects() {
       demo: "https://venkypuzzle.netlify.app/",
       image: "/projects/puzzle.png",
     },
+    {
+      title: "Life Saver",
+      desc: "A QR-driven hospital app designed for fast, secure access to patient information and healthcare services.",
+      github: "https://github.com/venkyaarm/LifeSaver",
+      demo: "https://lifesaverdoct.netlify.app/",
+      image: "/projects/lifesaver.png",
+    },
   ];
 
   return (
