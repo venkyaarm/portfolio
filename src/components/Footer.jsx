@@ -1,116 +1,114 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
-import { FaReact } from "react-icons/fa";
+import { FaReact, FaHeart } from "react-icons/fa";
 
 /* ------------------------------------------------------------- */
-/* PREMIUM ANIMATIONS */
+/* BACKGROUND PARTICLES */
 /* ------------------------------------------------------------- */
 
-// Floating animation for the icon
-const float = keyframes`
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-6px); }
-  100% { transform: translateY(0px); }
+const particleFloat = keyframes`
+  0% { transform: translateY(0); opacity: 0.25; }
+  50% { opacity: 0.7; }
+  100% { transform: translateY(-90px); opacity: 0; }
 `;
 
-// React icon spin-glow animation
+/* ------------------------------------------------------------- */
+/* SPECIAL ANIMATIONS */
+/* ------------------------------------------------------------- */
+
+const heartbeat = keyframes`
+  0% { transform: scaleX(0); opacity: 0.3; }
+  50% { transform: scaleX(1); opacity: 0.8; }
+  100% { transform: scaleX(0); opacity: 0.3; }
+`;
+
 const spinGlow = keyframes`
   0% { transform: rotate(0deg); filter: drop-shadow(0 0 3px #00eaff); }
   50% { transform: rotate(180deg); filter: drop-shadow(0 0 10px #00ffff); }
   100% { transform: rotate(360deg); filter: drop-shadow(0 0 3px #00eaff); }
 `;
 
-// Neon border animation
-const neonBorder = keyframes`
-  0% { box-shadow: 0 0 12px #00ffff80; }
-  50% { box-shadow: 0 0 25px #00ffff; }
-  100% { box-shadow: 0 0 12px #00ffff80; }
-`;
-
-// Soft sparkle pop animation
-const sparkle = keyframes`
-  0% { opacity: 0; transform: scale(0.6) translateY(0); }
-  50% { opacity: 1; transform: scale(1.1) translateY(-10px); }
-  100% { opacity: 0; transform: scale(0.6) translateY(0); }
-`;
-
 /* ------------------------------------------------------------- */
-/* FOOTER CONTAINER */
+/* FOOTER */
 /* ------------------------------------------------------------- */
 
 const Foot = styled.footer`
   position: relative;
-  text-align: center;
-  padding: 2.2rem;
-  background: #000c14;
+  padding: 2.6rem;
+  background: linear-gradient(135deg, #050b14, #020611);
   color: #aefaff;
-  font-size: 1.1rem;
-  border-top: 2px solid rgba(0, 255, 255, 0.2);
-  animation: ${neonBorder} 4s infinite ease-in-out;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  letter-spacing: 0.5px;
-  font-weight: 500;
-
-  @media (max-width: 480px) {
-    padding: 1.6rem;
-    font-size: 0.9rem;
-  }
+  text-align: center;
+  overflow: hidden;
 `;
 
 /* ------------------------------------------------------------- */
-/* TEXT + ICON */
+/* CURSOR GLOW (SPECIAL) */
+/* ------------------------------------------------------------- */
+
+const CursorGlow = styled.div`
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(0,200,200,0.14), transparent 65%);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  filter: blur(25px);
+`;
+
+/* ------------------------------------------------------------- */
+/* HEARTBEAT LINE */
+/* ------------------------------------------------------------- */
+
+const PulseLine = styled.div`
+  width: 160px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #00ffff, transparent);
+  margin: 0.8rem auto 1.2rem;
+  animation: ${heartbeat} 2.2s infinite ease-in-out;
+`;
+
+/* ------------------------------------------------------------- */
+/* TEXT */
 /* ------------------------------------------------------------- */
 
 const Text = styled.p`
-  margin: 0;
+  font-size: 1.1rem;
   opacity: 0.9;
-  transition: 0.3s ease;
-  font-size: 1.2rem;
 
-  &:hover {
-    opacity: 1;
-    color: #00ffff;
-    text-shadow: 0 0 12px #00ffff;
+  strong {
+    color: #ffcc00;
   }
 
   @media (max-width: 480px) {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 `;
 
 const ReactIcon = styled(FaReact)`
-  font-size: 1.6rem;
-  margin-left: 0.4rem;
-  animation: ${spinGlow} 6s linear infinite, ${float} 3s ease-in-out infinite;
+  margin-left: 6px;
+  animation: ${spinGlow} 6s linear infinite;
+`;
+
+const Heart = styled(FaHeart)`
+  color: #ff4d4d;
+  margin: 0 4px;
+  animation: ${heartbeat} 1.8s infinite;
 `;
 
 /* ------------------------------------------------------------- */
-/* SPARKLES IN BACKGROUND */
+/* BACKGROUND PARTICLES */
 /* ------------------------------------------------------------- */
 
-const Sparkle = styled.div`
+const Particle = styled.span`
   position: absolute;
-  width: 10px;
-  height: 10px;
-  background: radial-gradient(circle, #00eaff, transparent);
+  width: ${(p) => p.$size}px;
+  height: ${(p) => p.$size}px;
+  background: rgba(0, 200, 200, 0.28);
   border-radius: 50%;
-  opacity: 0.7;
-  animation: ${sparkle} 3s infinite ease-in-out;
-
-  &:nth-child(1) { top: 18%; left: 20%; animation-delay: 0s; }
-  &:nth-child(2) { bottom: 20%; right: 15%; animation-delay: 1s; }
-  &:nth-child(3) { top: 50%; right: 40%; animation-delay: 2s; }
-
-  @media (max-width: 480px) {
-    width: 6px;
-    height: 6px;
-    opacity: 0.5;
-  }
+  top: ${(p) => p.$top}%;
+  left: ${(p) => p.$left}%;
+  filter: blur(2px);
+  animation: ${particleFloat} ${(p) => p.$duration}s linear infinite;
 `;
 
 /* ------------------------------------------------------------- */
@@ -118,15 +116,34 @@ const Sparkle = styled.div`
 /* ------------------------------------------------------------- */
 
 export default function Footer() {
+  const [pos, setPos] = useState({ x: -200, y: -200 });
+
+  useEffect(() => {
+    const move = (e) => setPos({ x: e.clientX, y: e.clientY });
+    window.addEventListener("mousemove", move);
+    return () => window.removeEventListener("mousemove", move);
+  }, []);
+
   return (
     <Foot>
-      {/* Glowing sparkles */}
-      <Sparkle />
-      <Sparkle />
-      <Sparkle />
+      {/* Cursor glow */}
+      <CursorGlow style={{ left: pos.x, top: pos.y }} />
+
+      {/* Background particles */}
+      {[...Array(6)].map((_, i) => (
+        <Particle
+          key={i}
+          $size={4 + Math.random() * 5}
+          $top={Math.random() * 100}
+          $left={Math.random() * 100}
+          $duration={5 + Math.random() * 5}
+        />
+      ))}
+
+      <PulseLine />
 
       <Text>
-        Designed & Built by <strong style={{ color: "#ffcc00" }}>Venky</strong> © 2025
+        Designed & Built by <strong>Venky</strong> with <Heart /> using React
         <ReactIcon />
       </Text>
     </Foot>

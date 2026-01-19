@@ -3,44 +3,63 @@ import styled, { keyframes } from "styled-components";
 import { motion } from "framer-motion";
 
 /* ------------------------------------------------------------ */
-/*                     ELEGANT ANIMATIONS                        */
+/*                      BACKGROUND ANIMATION                     */
 /* ------------------------------------------------------------ */
 
-const float = keyframes`
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
-  100% { transform: translateY(0px); }
-`;
-
-const titleShine = keyframes`
-  0% { background-position: -200%; }
-  100% { background-position: 200%; }
+const particleFloat = keyframes`
+  0% { transform: translateY(0); opacity: 0.3; }
+  50% { opacity: 0.7; }
+  100% { transform: translateY(-120px); opacity: 0; }
 `;
 
 /* ------------------------------------------------------------ */
-/*                       SECTION STYLES                          */
+/*                       SECTION (FULL PAGE)                     */
 /* ------------------------------------------------------------ */
 
 const Section = styled.section`
-  padding: 6rem 10%;
-  background: linear-gradient(135deg, #061922, #0c2f3f, #14475c);
-  text-align: center;
-  border-radius: 20px;
-  box-shadow: 0px 0px 40px rgba(0, 255, 255, 0.18);
-  margin: 3rem auto;
-  color: white;
+  min-height: 100vh;
+  width: 100%;
+  padding: 6rem 12%;
+  background: linear-gradient(135deg, #050b14, #020611);
+  position: relative;
   overflow: hidden;
+  color: #fff;
+
+  @media (max-width: 900px) {
+    padding: 4rem 1.5rem;
+  }
 `;
+
+/* ------------------------------------------------------------ */
+/*                     PARTICLE BACKGROUND                       */
+/* ------------------------------------------------------------ */
+
+const Particle = styled.span`
+  position: absolute;
+  width: ${(p) => p.$size}px;
+  height: ${(p) => p.$size}px;
+  background: rgba(0, 200, 200, 0.3);
+  border-radius: 50%;
+  top: ${(p) => p.$top}%;
+  left: ${(p) => p.$left}%;
+  filter: blur(2px);
+  animation: ${particleFloat} ${(p) => p.$duration}s linear infinite;
+  pointer-events: none;
+`;
+
+/* ------------------------------------------------------------ */
+/*                          TITLE                                */
+/* ------------------------------------------------------------ */
 
 const Title = styled(motion.h2)`
   font-size: 3rem;
   font-weight: 800;
-  background: linear-gradient(90deg, #00ffff, white, #00ffff);
+  background: linear-gradient(90deg, #00eaff, #ffffff, #00eaff);
   -webkit-background-clip: text;
   color: transparent;
-  background-size: 300%;
-  animation: ${titleShine} 5s linear infinite;
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
+  position: relative;
+  z-index: 1;
 
   @media (max-width: 480px) {
     font-size: 2.2rem;
@@ -48,14 +67,16 @@ const Title = styled(motion.h2)`
 `;
 
 /* ------------------------------------------------------------ */
-/*                         GRID STYLING                          */
+/*                          GRID                                 */
 /* ------------------------------------------------------------ */
 
 const SkillGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 3rem;
+  gap: 3.5rem;
   justify-items: center;
+  position: relative;
+  z-index: 1;
 
   @media (max-width: 1024px) {
     grid-template-columns: repeat(3, 1fr);
@@ -69,11 +90,16 @@ const SkillGrid = styled.div`
 `;
 
 /* ------------------------------------------------------------ */
-/*                     PURE IMAGE SKILL CARD                     */
+/*                       SKILL CARD                              */
 /* ------------------------------------------------------------ */
 
+const float = keyframes`
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+`;
+
 const SkillCard = styled(motion.div)`
-  position: relative;
   width: 150px;
   height: 150px;
   animation: ${float} 4s ease-in-out infinite;
@@ -81,13 +107,13 @@ const SkillCard = styled(motion.div)`
   transition: 0.3s ease;
 
   &:hover img {
-    transform: scale(1.18);
-    filter: brightness(1.2) drop-shadow(0 0 12px #00ffff);
+    transform: scale(1.2);
+    filter: brightness(1.2) drop-shadow(0 0 14px #00ffff);
   }
 
   &:hover span {
     opacity: 1;
-    transform: translateY(10px);
+    transform: translateY(6px);
   }
 
   @media (max-width: 480px) {
@@ -106,18 +132,18 @@ const SkillImage = styled.img`
 const SkillName = styled.span`
   position: absolute;
   left: 50%;
-  bottom: -20px;
-  transform: translateX(-50%) translateY(20px);
-  font-size: 1.2rem;
+  bottom: -28px;
+  transform: translateX(-50%) translateY(18px);
+  font-size: 1.15rem;
   font-weight: 700;
   color: #00ffff;
   opacity: 0;
   transition: 0.4s ease;
-  text-shadow: 0 0 12px #00ffff;
+  text-shadow: 0 0 12px #00eaff;
 `;
 
 /* ------------------------------------------------------------ */
-/*                     ANIMATION VARIANTS                       */
+/*                      ANIMATION VARIANT                        */
 /* ------------------------------------------------------------ */
 
 const fadeUp = {
@@ -125,12 +151,12 @@ const fadeUp = {
   visible: (i) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.1, duration: 0.7 },
+    transition: { delay: i * 0.08, duration: 0.6 },
   }),
 };
 
 /* ------------------------------------------------------------ */
-/*                       COMPONENT                              */
+/*                         COMPONENT                             */
 /* ------------------------------------------------------------ */
 
 export default function Skills() {
@@ -150,6 +176,17 @@ export default function Skills() {
 
   return (
     <Section id="skills">
+      {/* Background particles */}
+      {[...Array(10)].map((_, i) => (
+        <Particle
+          key={i}
+          $size={4 + Math.random() * 6}
+          $top={Math.random() * 100}
+          $left={Math.random() * 100}
+          $duration={6 + Math.random() * 6}
+        />
+      ))}
+
       <Title
         initial={{ opacity: 0, y: -40 }}
         whileInView={{ opacity: 1, y: 0 }}

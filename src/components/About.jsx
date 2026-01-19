@@ -3,79 +3,85 @@ import styled, { keyframes } from "styled-components";
 import { motion, useAnimation, useInView } from "framer-motion";
 import { FaFilePdf, FaDownload } from "react-icons/fa";
 
-/* ------------------ GLOBAL ANIMATIONS ------------------ */
-
-const neonBorder = keyframes`
-  0% { box-shadow: 0 0 10px #00eaff, 0 0 20px #00eaff; }
-  50% { box-shadow: 0 0 20px #ff00aa, 0 0 40px #ff00aa; }
-  100% { box-shadow: 0 0 10px #00eaff, 0 0 20px #00eaff; }
-`;
+/* ------------------ ANIMATIONS ------------------ */
 
 const floatParticle = keyframes`
-  0% { transform: translateY(0px) scale(1); opacity: 0.6; }
-  50% { transform: translateY(-20px) scale(1.3); opacity: 1; }
-  100% { transform: translateY(0px) scale(1); opacity: 0.6; }
+  0% { transform: translateY(0) scale(1); opacity: 0.4; }
+  50% { transform: translateY(-18px) scale(1.3); opacity: 0.9; }
+  100% { transform: translateY(0) scale(1); opacity: 0.4; }
 `;
 
 const breathe = keyframes`
   0% { transform: scale(1); }
-  50% { transform: scale(1.02); }
+  50% { transform: scale(1.03); }
   100% { transform: scale(1); }
 `;
 
-const waveMove = keyframes`
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+const neonGlow = keyframes`
+  0% { box-shadow: 0 0 12px #00eaff; }
+  50% { box-shadow: 0 0 30px #ff00aa; }
+  100% { box-shadow: 0 0 12px #00eaff; }
 `;
 
-/* ------------------ SECTION STYLES ------------------ */
+/* ------------------ SECTION (HERO STYLE) ------------------ */
 
 const Section = styled.section`
-  padding: 7rem 12%;
-  background: linear-gradient(135deg, #09131c, #0c1e2c);
-  border-radius: 28px;
+  min-height: 100vh;
+  width: 100%;
+  padding: 6rem 12%;
+  background: linear-gradient(135deg, #050b14, #020611);
   position: relative;
   overflow: hidden;
-  margin-top: 5rem;
-  box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
+  color: #fff;
+
 
   @media (max-width: 900px) {
     padding: 4rem 1.5rem;
   }
 `;
 
-const Wave = styled.div`
+const Glow = styled.div`
   position: absolute;
-  top: 0;
-  left: 0;
-  height: 320px;
-  width: 200%;
-  background: radial-gradient(circle, rgba(0,255,255,0.15), transparent 70%);
-  animation: ${waveMove} 12s linear infinite;
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, rgba(0,200,200,0.14), transparent 70%);
+  border-radius: 50%;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  filter: blur(75px);
+  pointer-events: none;
 
   @media (max-width: 480px) {
-    height: 220px;
+    width: 260px;
+    height: 260px;
+    top: 25%;
   }
 `;
+
+/* ------------------ PARTICLES ------------------ */
 
 const Particle = styled.div`
   position: absolute;
   width: ${(p) => p.$size}px;
   height: ${(p) => p.$size}px;
-  background: rgba(0,255,255,0.5);
+  background: rgba(0,200,200,0.25);
   border-radius: 50%;
   top: ${(p) => p.$top}%;
   left: ${(p) => p.$left}%;
-  filter: blur(2px);
+  filter: blur(3px);
   animation: ${floatParticle} ${(p) => 3 + Math.random() * 3}s ease-in-out infinite;
 `;
 
+/* ------------------ LAYOUT ------------------ */
+
 const Container = styled.div`
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 4rem;
-  align-items: center;
-  flex-wrap: wrap;
+  position: relative;
+  z-index: 2;
 
   @media (max-width: 900px) {
     flex-direction: column-reverse;
@@ -83,52 +89,41 @@ const Container = styled.div`
   }
 `;
 
-/* ------------------ LEFT CONTENT ------------------ */
-
 const Content = styled.div`
   flex: 1.3;
-  color: #fff;
   max-width: 650px;
 `;
+
+/* ------------------ TEXT ------------------ */
 
 const Title = styled(motion.h2)`
   font-size: 3rem;
   font-weight: 800;
-  background: linear-gradient(90deg, #00eaff, #ffffff, #00eaff);
+  background: linear-gradient(90deg, #00eaff, #ffffff);
   -webkit-background-clip: text;
   color: transparent;
-  position: relative;
-
-  &::before, &::after {
-    content: "<>";
-    position: absolute;
-    font-size: 2rem;
-    top: 0;
-    opacity: 0.6;
-  }
-  &::before { left: -40px; }
-  &::after { right: -40px; }
 
   @media (max-width: 768px) {
-    font-size: 2.3rem;
+    font-size: 2.2rem;
   }
 `;
 
 const Description = styled(motion.p)`
-  margin-top: 1.5rem;
-  font-size: 1.15rem;
+  margin-top: 1.4rem;
+  font-size: 1.1rem;
   line-height: 1.7;
-  color: #d8f8ff;
+  color: #dffbff;
 
   strong {
     color: #00ffff;
-    text-shadow: 0 0 5px #00eaff;
   }
 
   @media (max-width: 768px) {
     font-size: 1rem;
   }
 `;
+
+/* ------------------ BUTTONS ------------------ */
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -166,7 +161,7 @@ const DownloadButton = styled(motion.a)`
   gap: 0.6rem;
   align-items: center;
   transition: 0.3s;
-  animation: ${neonBorder} 3s infinite;
+  animation: ${neonGlow} 3s infinite;
 
   &:hover {
     transform: scale(1.07);
@@ -174,12 +169,11 @@ const DownloadButton = styled(motion.a)`
   }
 `;
 
-/* ------------------ RIGHT IMAGE ------------------ */
+/* ------------------ IMAGE ------------------ */
 
 const ProfileWrapper = styled(motion.div)`
   flex: 1;
   max-width: 380px;
-  perspective: 1000px;
 `;
 
 const ImageBox = styled.div`
@@ -187,13 +181,11 @@ const ImageBox = styled.div`
   height: 380px;
   border-radius: 18px;
   overflow: hidden;
-  border: 4px solid transparent;
-  animation: ${neonBorder} 4s linear infinite;
+  animation: ${neonGlow} 4s infinite;
   transition: 0.4s;
-  transform-style: preserve-3d;
 
   &:hover {
-    transform: rotateY(12deg) rotateX(8deg) scale(1.05);
+    transform: scale(1.05);
   }
 
   @media (max-width: 768px) {
@@ -208,6 +200,8 @@ const ProfileImage = styled.img`
   animation: ${breathe} 4s infinite ease-in-out;
 `;
 
+/* ------------------ ANIMATION VARIANT ------------------ */
+
 const fadeUp = {
   hidden: { opacity: 0, y: 60 },
   visible: { opacity: 1, y: 0, transition: { duration: 1 } },
@@ -217,7 +211,7 @@ const fadeUp = {
 
 export default function About() {
   const ref = useRef(null);
-  const inView = useInView(ref, { threshold: 0.2 });
+  const inView = useInView(ref, { threshold: 0.25 });
   const controls = useAnimation();
 
   useEffect(() => {
@@ -226,9 +220,9 @@ export default function About() {
 
   return (
     <Section id="about" ref={ref}>
-      <Wave />
+      <Glow />
 
-      {[...Array(12)].map((_, i) => (
+      {[...Array(14)].map((_, i) => (
         <Particle
           key={i}
           $size={6 + Math.random() * 10}
@@ -244,16 +238,14 @@ export default function About() {
           </Title>
 
           <Description initial="hidden" animate={controls} variants={fadeUp}>
-            I'm <strong>Kuncham Venkatesh</strong>, a passionate <strong>BCA student</strong> specializing in 
+            I'm <strong>Kuncham Venkatesh</strong>, a passionate <strong>BCA student</strong> specializing in
             <strong> AI-powered and API-driven web applications</strong>.
-            My focus is on developing visually stunning, intelligent, and interactive experiences using 
-            <strong> React.js</strong>, <strong>Node.js</strong>, and modern UI/UX workflows.
             <br /><br />
-            I build next-gen tools like **AI Resume Analyzers**, **Q&A Systems**, **Interactive Web Apps**, and high-quality,
-            futuristic interfaces that blend creativity with precision.
+            I focus on crafting intelligent, visually stunning, and interactive digital experiences using
+            <strong> React.js</strong>, <strong> Node.js</strong>, and modern UI/UX workflows.
             <br /><br />
-            I'm constantly improving my skill set, exploring new technologies, and pushing boundaries to create 
-            meaningful, powerful, and user-inspired digital products.
+            I build next-generation tools like AI Resume Analyzers, Q&A systems, and futuristic web platforms
+            that blend creativity with performance.
           </Description>
 
           <ButtonContainer>

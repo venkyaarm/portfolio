@@ -9,17 +9,24 @@ import {
   FaWhatsapp,
 } from "react-icons/fa";
 
-/* SOFT ANIMATIONS */
-const float = keyframes`
-  0% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-7px) rotate(-1deg); }
-  100% { transform: translateY(0px) rotate(0deg); }
+/* ------------------------------------------------------------ */
+/*                    BACKGROUND ANIMATION                       */
+/* ------------------------------------------------------------ */
+
+const particleFloat = keyframes`
+  0% { transform: translateY(0); opacity: 0.25; }
+  50% { opacity: 0.7; }
+  100% { transform: translateY(-120px); opacity: 0; }
 `;
 
-const sparkle = keyframes`
-  0% { opacity: 0; transform: scale(0.6); }
-  50% { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(0.6); }
+/* ------------------------------------------------------------ */
+/*                     SOFT UI ANIMATIONS                        */
+/* ------------------------------------------------------------ */
+
+const float = keyframes`
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0px); }
 `;
 
 const titleGlow = keyframes`
@@ -28,46 +35,57 @@ const titleGlow = keyframes`
   100% { text-shadow: 0 0 5px rgba(0,255,255,0.5); }
 `;
 
-const borderPulse = keyframes`
-  0% { box-shadow: 0 0 15px rgba(0,255,255,0.4); }
-  50% { box-shadow: 0 0 30px rgba(0,255,255,0.8); }
-  100% { box-shadow: 0 0 15px rgba(0,255,255,0.4); }
-`;
+/* ------------------------------------------------------------ */
+/*                          SECTION                              */
+/* ------------------------------------------------------------ */
 
-/* SECTION */
 const Section = styled.section`
-  padding: 6rem 8%;
-  background: #000a12;
+  min-height: 10vh;
+  padding: 6rem 10%;
+  background: linear-gradient(135deg, #050b14, #020611);
   color: #f0f8ff;
   text-align: center;
-  margin: 4rem auto;
   position: relative;
   overflow: hidden;
-  max-width: 1100px;
-  border-radius: 20px;
-  border: 1px solid rgba(0,255,255,0.1);
-  animation: ${borderPulse} 4s infinite ease-in-out;
 
   @media (max-width: 480px) {
     padding: 4rem 6%;
-    margin: 2rem auto;
   }
 `;
 
-/* TITLE */
+/* ------------------------------------------------------------ */
+/*                    BACKGROUND PARTICLES                       */
+/* ------------------------------------------------------------ */
+
+const Particle = styled.span`
+  position: absolute;
+  width: ${(p) => p.$size}px;
+  height: ${(p) => p.$size}px;
+  background: rgba(0, 200, 200, 0.28);
+  border-radius: 50%;
+  top: ${(p) => p.$top}%;
+  left: ${(p) => p.$left}%;
+  filter: blur(2px);
+  animation: ${particleFloat} ${(p) => p.$duration}s linear infinite;
+  pointer-events: none;
+`;
+
+/* ------------------------------------------------------------ */
+/*                          TITLE                                */
+/* ------------------------------------------------------------ */
+
 const Title = styled.h2`
   font-size: 3.5rem;
   font-weight: 900;
   color: #00eaff;
-  margin-bottom: 0.5rem;
-  text-transform: uppercase;
+  margin-bottom: 0.6rem;
   letter-spacing: 2px;
-  animation: ${titleGlow} 3s infinite ease-in-out;
+  animation: ${titleGlow} 3s infinite;
+  position: relative;
+  z-index: 1;
 
   @media (max-width: 480px) {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    letter-spacing: 1px;
+    font-size: 2.2rem;
   }
 `;
 
@@ -75,46 +93,26 @@ const Subtitle = styled.p`
   font-size: 1.2rem;
   color: #b0e0e6;
   margin-bottom: 3.5rem;
+  position: relative;
+  z-index: 1;
 
   @media (max-width: 480px) {
     font-size: 1rem;
-    margin-bottom: 2.5rem;
   }
 `;
 
-/* SPARKLES */
-const Sparkle = styled.div`
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  background: radial-gradient(circle, #00eaff 50%, transparent);
-  border-radius: 50%;
-  animation: ${sparkle} 4s infinite;
+/* ------------------------------------------------------------ */
+/*                     CONTACT DETAILS                           */
+/* ------------------------------------------------------------ */
 
-  @media (max-width: 480px) {
-    width: 6px;
-    height: 6px;
-    opacity: 0.5;
-  }
-
-  &:nth-child(1) { top: 10%; left: 18%; }
-  &:nth-child(2) { top: 60%; right: 12%; }
-  &:nth-child(3) { bottom: 10%; left: 45%; }
-  &:nth-child(4) { top: 75%; right: 65%; }
-`;
-
-/* CONTACT DETAILS BOXES */
 const ContactDetails = styled.div`
   margin-bottom: 4rem;
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
   justify-content: center;
-
-  @media (max-width: 480px) {
-    gap: 1rem;
-    margin-bottom: 2.5rem;
-  }
+  position: relative;
+  z-index: 1;
 `;
 
 const DetailBox = styled.div`
@@ -126,47 +124,84 @@ const DetailBox = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
-
-  &:hover {
-    border-color: #00eaff;
-    transform: translateY(-5px);
-  }
-
-  @media (max-width: 480px) {
-    min-width: 100%;
-    padding: 0.9rem 1.2rem;
-    gap: 0.8rem;
-  }
+  transition: 0.3s ease;
+  cursor: pointer;
 
   svg {
     font-size: 1.8rem;
-    color: #00eaff;
-
-    @media (max-width: 480px) {
-      font-size: 1.4rem;
-    }
+    transition: 0.3s ease;
   }
 
   a, span {
     font-size: 1.2rem;
     color: #dffcff;
+    transition: 0.3s ease;
+  }
 
-    @media (max-width: 480px) {
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  /* ---------------- PLATFORM COLORS ---------------- */
+
+  &[data-platform="email"]:hover {
+    border-color: #ffd700;
+
+    svg {
+      color: #ffd700;
+    }
+
+    a {
+      color: #ffd700;
+    }
+  }
+
+  &[data-platform="phone"]:hover {
+    border-color: blue;
+
+    svg {
+      color: blue;
+    }
+
+    span {
+      color: blue;
+    }
+  }
+
+  &[data-platform="whatsapp"]:hover {
+    border-color: #25d366;
+
+    svg {
+      color: #25d366;
+    }
+
+    a {
+      color: #86efac;
+    }
+  }
+
+
+
+  @media (max-width: 480px) {
+    min-width: 100%;
+    padding: 0.9rem 1.2rem;
+    a, span {
       font-size: 1rem;
     }
   }
 `;
 
-/* SOCIAL ICONS */
+/* ------------------------------------------------------------ */
+/*                       SOCIAL ICONS                            */
+/* ------------------------------------------------------------ */
+
 const IconGrid = styled.div`
   display: flex;
   justify-content: center;
   gap: 1.8rem;
   flex-wrap: wrap;
-
-  @media (max-width: 480px) {
-    gap: 1.2rem;
-  }
+  position: relative;
+  z-index: 1;
 `;
 
 const IconWrapper = styled.a`
@@ -181,11 +216,25 @@ const IconWrapper = styled.a`
   color: #00eaff;
   font-size: 2rem;
   animation: ${float} 4s infinite;
+  transition: 0.3s ease;
 
   &:hover {
     transform: scale(1.15);
-    color: #ffcc00;
-    border-color: #ffcc00;
+  }
+
+  &[data-brand="github"]:hover {
+    color: #ffffff;
+    border-color: #ffffff;
+  }
+
+  &[data-brand="linkedin"]:hover {
+    color: #0a66c2;
+    border-color: #0a66c2;
+  }
+
+  &[data-brand="instagram"]:hover {
+    color: #c13584;
+    border-color: #c13584;
   }
 
   @media (max-width: 480px) {
@@ -195,40 +244,78 @@ const IconWrapper = styled.a`
   }
 `;
 
-/* COMPONENT */
+/* ------------------------------------------------------------ */
+/*                         COMPONENT                             */
+/* ------------------------------------------------------------ */
+
 export default function Contact() {
   return (
     <Section id="contact">
-      <Sparkle /><Sparkle /><Sparkle /><Sparkle />
+      {/* Background particles */}
+      {[...Array(12)].map((_, i) => (
+        <Particle
+          key={i}
+          $size={4 + Math.random() * 6}
+          $top={Math.random() * 100}
+          $left={Math.random() * 100}
+          $duration={6 + Math.random() * 6}
+        />
+      ))}
 
       <Title>Connect & Collaborate</Title>
-
-      {/* FIXED → replaced smart apostrophe */}
       <Subtitle>Ready to start a project? Let's talk!</Subtitle>
 
       <ContactDetails>
-        <DetailBox>
-          <FaEnvelope />
-          <a href="mailto:venkyaam@mail.com">venkyaam@mail.com</a>
-        </DetailBox>
+        <DetailBox data-platform="email">
+  <FaEnvelope />
+  <a href="mailto:venkyaam@mail.com">venkyaam@mail.com</a>
+</DetailBox>
 
-        <DetailBox>
-          <FaPhone />
-          <span>+91 8125522139</span>
-        </DetailBox>
+<DetailBox data-platform="phone">
+  <FaPhone />
+  <span>+91 8125522139</span>
+</DetailBox>
 
-        <DetailBox>
-          <FaWhatsapp />
-          <a href="https://wa.me/918125522139" target="_blank" rel="noreferrer">
-            Chat on WhatsApp
-          </a>
-        </DetailBox>
+<DetailBox data-platform="whatsapp">
+  <FaWhatsapp />
+  <a
+    href="https://wa.me/918125522139"
+    target="_blank"
+    rel="noreferrer"
+  >
+    Chat on WhatsApp
+  </a>
+</DetailBox>
+
       </ContactDetails>
 
       <IconGrid>
-        <IconWrapper href="https://github.com/venkyaarm" target="_blank" rel="noreferrer"><FaGithub /></IconWrapper>
-        <IconWrapper href="https://linkedin.com/in/venkatesh-kuncham-120531307" target="_blank" rel="noreferrer"><FaLinkedin /></IconWrapper>
-        <IconWrapper href="https://instagram.com/venky__x8" target="_blank" rel="noreferrer"><FaInstagram /></IconWrapper>
+        <IconWrapper
+          data-brand="github"
+          href="https://github.com/venkyaarm"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <FaGithub />
+        </IconWrapper>
+
+        <IconWrapper
+          data-brand="linkedin"
+          href="https://linkedin.com/in/venkatesh-kuncham-120531307"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <FaLinkedin />
+        </IconWrapper>
+
+        <IconWrapper
+          data-brand="instagram"
+          href="https://instagram.com/venky__x8"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <FaInstagram />
+        </IconWrapper>
       </IconGrid>
     </Section>
   );

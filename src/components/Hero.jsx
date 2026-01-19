@@ -38,7 +38,7 @@ const glowWave = keyframes`
 const HeroSection = styled.section`
   height: 100vh;
   width: 100%;
-  background: linear-gradient(135deg, #09131c, #071a29);
+  background: linear-gradient(135deg, #050b14, #020611);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -48,21 +48,17 @@ const HeroSection = styled.section`
   color: #fff;
   text-align: center;
   padding: 0 1rem;
-
-  @media (max-width: 480px) {
-    height: 100vh;
-    padding: 0 0.6rem;
-  }
 `;
+
 
 const Spotlight = styled.div`
   position: absolute;
   width: 380px;
   height: 380px;
-  background: radial-gradient(circle, rgba(0, 255, 255, 0.2), transparent);
+  background: radial-gradient(circle, rgba(0, 200, 200, 0.15), transparent);
   border-radius: 50%;
   top: 35%;
-  filter: blur(60px);
+  filter: blur(70px);
   z-index: 0;
 
   @media (max-width: 480px) {
@@ -77,7 +73,7 @@ const Spotlight = styled.div`
 const Particle = styled.div`
   position: absolute;
   border-radius: 50%;
-  background: rgba(0, 255, 255, 0.4);
+  background: rgba(0, 200, 200, 0.3);
   width: ${(p) => p.$size}px;
   height: ${(p) => p.$size}px;
   top: ${(p) => p.$top}%;
@@ -196,16 +192,37 @@ const IconLink = styled.a`
   font-size: 2rem;
   color: #00ffff;
   transition: 0.3s;
+  display: flex;
 
   &:hover {
-    color: #ffd700;
     transform: scale(1.25);
+  }
+
+  &[data-platform="linkedin"]:hover {
+    color: #0a66c2;
+  }
+
+  &[data-platform="instagram"]:hover {
+    color: #b1184eff;
+  }
+
+  &[data-platform="whatsapp"]:hover {
+    color: #25d366;
+  }
+
+  &[data-platform="github"]:hover {
+    color: #ffffff;
+  }
+
+  &[data-platform="email"]:hover {
+    color: #ffd700;
   }
 
   @media (max-width: 480px) {
     font-size: 1.45rem;
   }
 `;
+
 
 /* ------------------ COMPONENT ------------------ */
 
@@ -254,12 +271,46 @@ export default function Hero() {
       </Description>
 
       <SocialContainer>
-        <IconLink href="https://github.com/venkyaarm" target="_blank"><FaGithub /></IconLink>
-        <IconLink href="https://linkedin.com/in/venkatesh-kuncham-120531307" target="_blank"><FaLinkedin /></IconLink>
-        <IconLink href="https://instagram.com/venky__x8" target="_blank"><FaInstagram /></IconLink>
-        <IconLink href="mailto:venkesh.k@example.com"><FaEnvelope /></IconLink>
-        <IconLink href="https://wa.me/918125522139" target="_blank"><FaWhatsapp /></IconLink>
-      </SocialContainer>
+  <IconLink
+    data-platform="github"
+    href="https://github.com/venkyaarm"
+    target="_blank"
+  >
+    <FaGithub />
+  </IconLink>
+
+  <IconLink
+    data-platform="linkedin"
+    href="https://linkedin.com/in/venkatesh-kuncham-120531307"
+    target="_blank"
+  >
+    <FaLinkedin />
+  </IconLink>
+
+  <IconLink
+    data-platform="instagram"
+    href="https://instagram.com/venky__x8"
+    target="_blank"
+  >
+    <FaInstagram />
+  </IconLink>
+
+  <IconLink
+    data-platform="email"
+    href="mailto:venkyaarm@gmail.com"
+  >
+    <FaEnvelope />
+  </IconLink>
+
+  <IconLink
+    data-platform="whatsapp"
+    href="https://wa.me/918125522139"
+    target="_blank"
+  >
+    <FaWhatsapp />
+  </IconLink>
+</SocialContainer>
+
     </HeroSection>
   );
 }

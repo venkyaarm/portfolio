@@ -4,14 +4,18 @@ import { motion } from "framer-motion";
 import { FaGithub } from "react-icons/fa";
 
 /* ------------------------------------------------------------ */
-/*                     PREMIUM ANIMATIONS                        */
+/*                  BACKGROUND PARTICLE ANIMATION                */
 /* ------------------------------------------------------------ */
 
-const float = keyframes`
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-6px); }
-  100% { transform: translateY(0px); }
+const particleFloat = keyframes`
+  0% { transform: translateY(0); opacity: 0.25; }
+  50% { opacity: 0.7; }
+  100% { transform: translateY(-120px); opacity: 0; }
 `;
+
+/* ------------------------------------------------------------ */
+/*                     PREMIUM ANIMATIONS                        */
+/* ------------------------------------------------------------ */
 
 const shine = keyframes`
   0% { background-position: -200%; }
@@ -23,9 +27,12 @@ const shine = keyframes`
 /* ------------------------------------------------------------ */
 
 const Section = styled.section`
-  padding: 5rem 10%;
-  background: linear-gradient(135deg, #061822, #0c2f3f, #154b63);
+  min-height: 100vh;
+  padding: 6rem 10%;
+  background: linear-gradient(135deg, #050b14, #020611);
   color: #fff;
+  position: relative;
+  overflow: hidden;
 
   h2 {
     text-align: center;
@@ -36,6 +43,47 @@ const Section = styled.section`
     color: transparent;
     background-size: 300%;
     animation: ${shine} 5s linear infinite;
+    position: relative;
+    z-index: 1;
+  }
+
+  @media (max-width: 768px) {
+    padding: 4rem 1.5rem;
+  }
+`;
+
+/* ------------------------------------------------------------ */
+/*                    BACKGROUND PARTICLES                       */
+/* ------------------------------------------------------------ */
+
+const Particle = styled.span`
+  position: absolute;
+  width: ${(p) => p.$size}px;
+  height: ${(p) => p.$size}px;
+  background: rgba(0, 200, 200, 0.28);
+  border-radius: 50%;
+  top: ${(p) => p.$top}%;
+  left: ${(p) => p.$left}%;
+  filter: blur(2px);
+  animation: ${particleFloat} ${(p) => p.$duration}s linear infinite;
+  pointer-events: none;
+`;
+
+
+/* ------------------------------------------------------------ */
+/*                   PROJECTS GRID (DESKTOP ONLY)                */
+/* ------------------------------------------------------------ */
+
+const ProjectsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem;
+  position: relative;
+  z-index: 1;
+
+  /* Tablet & Mobile – unchanged (1 column) */
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
   }
 `;
 
@@ -45,14 +93,11 @@ const Section = styled.section`
 
 const Card = styled(motion.div)`
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
   padding: 1.8rem;
-  margin-bottom: 2.5rem;
   border-radius: 18px;
-  overflow: hidden;
   backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.06);
+  background: black;
   border: 1px solid rgba(0, 255, 255, 0.15);
   box-shadow: 0 0 25px rgba(0, 255, 255, 0.15);
   transition: 0.35s ease;
@@ -61,11 +106,6 @@ const Card = styled(motion.div)`
     transform: translateY(-5px) scale(1.02);
     box-shadow: 0 0 35px rgba(0, 255, 255, 0.4);
   }
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    padding: 1.3rem;
-  }
 `;
 
 /* ------------------------------------------------------------ */
@@ -73,38 +113,38 @@ const Card = styled(motion.div)`
 /* ------------------------------------------------------------ */
 
 const CardContent = styled.div`
-  flex: 1.4;
-  padding-right: 2.2rem;
-  max-width: 620px;
+  flex: 1;
 
   h3 {
-    font-size: 2.1rem;
+    font-size: 2rem;
     margin-bottom: 1rem;
     color: #ffcc00;
   }
 
   p {
-    line-height: 1.85;
-    font-size: 1.15rem;
+    line-height: 1.75;
+    font-size: 1.05rem;
     color: #e0f7ff;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     text-align: justify;
   }
 
   .links {
     display: flex;
     align-items: center;
-    gap: 1.4rem;
+    gap: 1.2rem;
   }
 
   @media (max-width: 768px) {
-    padding-right: 0;
-    max-width: 100%;
     text-align: center;
 
     p {
       font-size: 1rem;
       text-align: center;
+    }
+
+    .links {
+      justify-content: center;
     }
   }
 `;
@@ -126,12 +166,11 @@ const GithubLink = styled.a`
 `;
 
 const ViewButton = styled.a`
-  padding: 0.7rem 1.7rem;
+  padding: 0.7rem 1.6rem;
   background: linear-gradient(135deg, #00ffff, #00bcd4);
   color: #000;
   font-weight: 700;
   border-radius: 10px;
-  text-decoration: none;
   transition: 0.35s ease;
   box-shadow: 0 4px 15px rgba(0,255,255,0.3);
 
@@ -143,15 +182,15 @@ const ViewButton = styled.a`
 `;
 
 /* ------------------------------------------------------------ */
-/*                 PROJECT IMAGE — FIXED SIZE                    */
+/*                        PROJECT IMAGE                          */
 /* ------------------------------------------------------------ */
 
 const CardImage = styled.div`
-  flex: 1;
-  width: 420px;
-  height: 260px;
+  width: 100%;
+  height: 220px;
   border-radius: 14px;
   overflow: hidden;
+  margin-top: 1.2rem;
   box-shadow: 0 0 20px rgba(0,255,255,0.2);
 
   img {
@@ -159,12 +198,6 @@ const CardImage = styled.div`
     height: 100%;
     object-fit: cover;
     transition: 0.5s ease;
-  }
-
-  @media (max-width: 768px) {
-    width: 100%;
-    height: 230px;
-    margin-top: 1.5rem;
   }
 `;
 
@@ -177,7 +210,7 @@ const cardVariant = {
   visible: (i) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.15, duration: 0.6, ease: "easeOut" },
+    transition: { delay: i * 0.12, duration: 0.6, ease: "easeOut" },
   }),
 };
 
@@ -188,11 +221,11 @@ const cardVariant = {
 export default function Projects() {
   const projects = [
     {
-      title: "AI Q&A App",
-      desc: "An AI-powered real-time Q&A application built with React.js and Gemini API for intelligent responses.",
-      github: "https://github.com/venkyaarm/Venky-Q-and-A-app",
-      demo: "https://venky-q-and-a-app.netlify.app/",
-      image: "/projects/ai-qa.png",
+      title: "Portfolio Creator",
+      desc: "An advanced Portfolio Creator that dynamically builds fully responsive, modern portfolios from user inputs and also users can deploy their portfolios which generates the link Instently.",
+      github: "https://github.com/venkyaarm/Portfolio-Creator-frontend",
+      demo: "https://venkyportfoliocreator.netlify.app/",
+      image: "/projects/portfolio.png",
     },
     {
       title: "PPT Generator",
@@ -240,35 +273,48 @@ export default function Projects() {
 
   return (
     <Section id="projects">
+      {/* Animated background dots */}
+      {[...Array(12)].map((_, i) => (
+        <Particle
+          key={i}
+          $size={4 + Math.random() * 6}
+          $top={Math.random() * 100}
+          $left={Math.random() * 100}
+          $duration={6 + Math.random() * 6}
+        />
+      ))}
+
       <h2>Projects</h2>
 
-      {projects.map((p, i) => (
-        <Card
-          key={i}
-          custom={i}
-          initial="hidden"
-          whileInView="visible"
-          variants={cardVariant}
-          viewport={{ once: true, amount: 0.2 }}
-        >
-          <CardContent>
-            <h3>{p.title}</h3>
-            <p>{p.desc}</p>
-            <div className="links">
-              <GithubLink href={p.github} target="_blank">
-                <FaGithub />
-              </GithubLink>
-              <ViewButton href={p.demo} target="_blank">
-                View Project
-              </ViewButton>
-            </div>
-          </CardContent>
+      <ProjectsGrid>
+        {projects.map((p, i) => (
+          <Card
+            key={i}
+            custom={i}
+            initial="hidden"
+            whileInView="visible"
+            variants={cardVariant}
+            viewport={{ once: true, amount: 0.2 }}
+          >
+            <CardContent>
+              <h3>{p.title}</h3>
+              <p>{p.desc}</p>
+              <div className="links">
+                <GithubLink href={p.github} target="_blank">
+                  <FaGithub />
+                </GithubLink>
+                <ViewButton href={p.demo} target="_blank">
+                  View Project
+                </ViewButton>
+              </div>
+            </CardContent>
 
-          <CardImage>
-            <img src={p.image} alt={p.title} />
-          </CardImage>
-        </Card>
-      ))}
+            <CardImage>
+              <img src={p.image} alt={p.title} />
+            </CardImage>
+          </Card>
+        ))}
+      </ProjectsGrid>
     </Section>
   );
 }
